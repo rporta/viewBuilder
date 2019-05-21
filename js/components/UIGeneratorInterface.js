@@ -1,4 +1,18 @@
 let UIGeneratorInterface = class {
+
+	static get UI() {
+		return this._UI;
+	}
+	static set UI(arg) {
+		this._UI = arg;
+		return arg;
+	}
+	static getInstance(appVue) {
+		if (typeof UIGeneratorInterface.UI === "undefined") {
+			UIGeneratorInterface.UI = new UIGeneratorInterface(appVue);
+		}
+		return UIGeneratorInterface.UI;
+	}
 	constructor(appVue) {
 		this.appVue = appVue;
 
@@ -13,7 +27,6 @@ let UIGeneratorInterface = class {
 
 		//REGISTER EVENTS 
 		this.registerEvents();
-
 	}
 	uiLayerPrimary() {
 		//parameters config
@@ -98,12 +111,12 @@ let UIGeneratorInterface = class {
 		// $(this.ulpObject.ButtonPantallaCompleta.$el).css("top", "25px");
 		// $(this.ulpObject.ButtonPantallaCompleta.$el).css("left", "25px");
 
-		this.ulpObject.IconRegilla = this.appVue.newComponent("c-icon").setIcon("cloud");
-		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon").setIcon("cloud");
-		this.ulpObject.IconAtras = this.appVue.newComponent("c-icon").setIcon("cloud");
-		this.ulpObject.IconAdelante = this.appVue.newComponent("c-icon").setIcon("cloud");
-		this.ulpObject.IconGuardar = this.appVue.newComponent("c-icon").setIcon("cloud");
-		this.ulpObject.IconPantallaCompleta = this.appVue.newComponent("c-icon").setIcon("cloud");
+		this.ulpObject.IconRegilla = this.appVue.newComponent("c-icon").setIcon("apps");
+		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon").setIcon("open_in_new");
+		this.ulpObject.IconAtras = this.appVue.newComponent("c-icon").setIcon("undo");
+		this.ulpObject.IconAdelante = this.appVue.newComponent("c-icon").setIcon("redo");
+		this.ulpObject.IconGuardar = this.appVue.newComponent("c-icon").setIcon("save");
+		this.ulpObject.IconPantallaCompleta = this.appVue.newComponent("c-icon").setIcon("fullscreen");
 
 		this.ulpObject.ButtonRegilla.create(this.ulpObject.IconRegilla);
 		this.ulpObject.ButtonEscala.create(this.ulpObject.IconEscala);
@@ -249,56 +262,58 @@ let UIGeneratorInterface = class {
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
 		$(this.ulpObject.ButtonPantallaCompleta.$el).click(function(e) {
 
-			if (UI.ulpProperty.ButtonPantallaCompleta) {
+			if (UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta) {
 				//volver al modo edicion
-				$(UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
-				UI.ulpObject.panelLeft.setShow(1);
-				UI.ulpObject.panelLeft.setShow(1);
-				UI.ulpObject.ButtonAtras.setShow(1);
-				UI.ulpObject.ButtonAdelante.setShow(1);
-				UI.ulpObject.ButtonGuardar.setShow(1);
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
+				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
+				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
+				UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(1);
+				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(1);
+				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(1);
+				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen");
 			} else {
+				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen_exit");
 				//poner en pantalla completa
-				$(UI.ulsObject.panelComponentLeft.$el).css("width", "0px");
-				UI.ulpObject.panelLeft.setShow(0);
-				UI.ulpObject.ButtonAtras.setShow(0);
-				UI.ulpObject.ButtonAdelante.setShow(0);
-				UI.ulpObject.ButtonGuardar.setShow(0);
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "0px");
+				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(0);
+				UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(0);
+				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(0);
+				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(0);
 			}
 
-			UI.ulpProperty.ButtonPantallaCompleta = !UI.ulpProperty.ButtonPantallaCompleta;
+			UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta = !UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta;
 		});
 	}
 	uiLayerSecondaryEvents() {
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
 		$(this.ulsObject.panelComponentLeft.$el).mouseover(function(e) {
-			if (UI.ulsProperty.panelComponentLeftShort) {
-				UI.ulsProperty.panelComponentLeftShort = !UI.ulsProperty.panelComponentLeftShort;
-				$(UI.ulsObject.panelComponentLeft.$el).css("width", "185px");
-				$(UI.ulpObject.panelLeft.$el).css("left", "195px");
-				$(UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "scroll");
-				UI.ulsObject.panelComponentLeft.setShadow(app.shadow[3]);
+			if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
+				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "185px");
+				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "195px");
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "scroll");
+				UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[3]);
 			}
 		});
 		$(this.ulsObject.panelComponentLeft.$el).mouseout(function(e) {
-			if (!UI.ulsProperty.panelComponentLeftShort) {
-				UI.ulsProperty.panelComponentLeftShort = !UI.ulsProperty.panelComponentLeftShort;
-				$(UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
-				$(UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
-				$(UI.ulpObject.panelLeft.$el).css("left", "50px");
-				UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
+			if (!UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
+				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
+				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "50px");
+				UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
 			}
 		});
 	}
 	previsualizationLayerEvents() {
 		// events, se trabaja con la variable de instancia para acceder a los componentes 
 		// $(this.ulsObject.uiLayerSecondary.$el).mouseover(function(e) {
-		// 	if (UI.ulsProperty.panelComponentLeftShort) {
-		// 		UI.ulsProperty.panelComponentLeftShort = !UI.ulsProperty.panelComponentLeftShort;
-		// 		$(UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
-		// 		$(UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
-		// 		$(UI.ulpObject.panelLeft.$el).css("left", "50px");
-		// 		UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
+		// 	if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
+		// 		UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
+		// 		$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
+		// 		$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
+		// 		$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "50px");
+		// 		UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
 		// 	}
 		// });
 	}

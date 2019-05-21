@@ -6,7 +6,7 @@ setTimeout(() => {
 }, 1000);
 app.create(preloaderFull);
 
-var UI = new UIGeneratorInterface(app);
+UIGeneratorInterface.getInstance(app);
 
 
 // var footer = app.newComponent('c-footer').setText("").setColor(app.generateColor()).setColorText(app.generateColorText()).setTextAling(app.textAling.c);
