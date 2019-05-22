@@ -133,6 +133,7 @@ let UIGeneratorInterface = class {
 		this.ulsObject = new Object();
 		this.ulsProperty = new Object();
 		this.ulsProperty.panelComponentLeftShort = true;
+		this.ulsProperty.panelPropertyRightShow = false;
 		//uiLayerSecondary
 		this.ulsObject.uiLayerSecondary = this.appVue.newComponent("c-div").setColor("blue");
 		this.appVue.create(this.ulsObject.uiLayerSecondary);
@@ -151,7 +152,6 @@ let UIGeneratorInterface = class {
 		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor("red");
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelComponentLeft);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelPropertyRight);
-
 
 		//panelComponentLeft
 		$(this.ulsObject.panelComponentLeft.$el).css("position", "absolute");
@@ -173,14 +173,12 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.panelPropertyRight.$el).css("top", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("right", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("height", "100%");
-		$(this.ulsObject.panelPropertyRight.$el).css("width", "50px");
+		$(this.ulsObject.panelPropertyRight.$el).css("width", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("-webkit-transition", "all 1s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("-moz-transition", "all 1s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("-o-transition", "all 1s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("-ms-transition", "all 1s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("transition", "all 1s ease");
-
-		this.ulsObject.panelPropertyRight.setShow(0);
 
 		//components
 		var nameComponents = new Array();
@@ -231,6 +229,8 @@ let UIGeneratorInterface = class {
 
 	}
 	previsualizationLayer() {
+		this.history = new Object();
+		this.save = new Object();
 		this.plObject = new Object();
 		this.plObject.previsualizationLayer = this.appVue.newComponent("c-div").setColor("green");
 		this.appVue.create(this.plObject.previsualizationLayer);
@@ -253,6 +253,10 @@ let UIGeneratorInterface = class {
 				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen");
+				console.log(UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow);
+				if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
+					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "250px");
+				}
 			} else {
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen_exit");
 				//poner en pantalla completa
@@ -261,10 +265,21 @@ let UIGeneratorInterface = class {
 				UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(0);
 				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(0);
 				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(0);
+				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
 			}
 
 			UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta = !UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta;
 		});
+
+		for (var x in this.ulsObject.component) {
+			var currentComponent = x;
+			$(this.ulsObject.component[currentComponent].$el).click(function(e) {
+				if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
+					UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = true;
+				}
+				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "250px");
+			});
+		}
 	}
 	uiLayerSecondaryEvents() {
 
@@ -290,7 +305,6 @@ let UIGeneratorInterface = class {
 				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "88px");
 				for (var x in UIGeneratorInterface.UI.ulsObject.component) {
 					var currentComponent = x;
-					console.log(currentComponent);
 					$(UIGeneratorInterface.UI.ulsObject.component[currentComponent].$el).css("width", "52px"); //boton corto
 				}
 
@@ -299,14 +313,19 @@ let UIGeneratorInterface = class {
 	}
 	previsualizationLayerEvents() {
 		// events, se trabaja con la variable de instancia para acceder a los componentes 
-		// $(this.ulsObject.uiLayerSecondary.$el).mouseover(function(e) {
-		// 	if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
-		// 		UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
-		// 		$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
-		// 		$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
-		// 		$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "50px");
-		// 		UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
-		// 	}
-		// });
+		$(this.ulsObject.uiLayerSecondary.$el).click(function(e) {
+			if (e.currentTarget === e.target) {
+				UIGeneratorInterface.UI.panelPropertyRightOut(e);
+			}
+		});
+		$(this.ulsObject.uiLayerSecondary.$el).click(function(e) {
+			if (e.currentTarget === e.target) {
+				UIGeneratorInterface.UI.panelPropertyRightOut(e);
+			}
+		});
+	}
+
+	panelPropertyRightOut() {
+		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
 	}
 }
