@@ -65,6 +65,12 @@ let UIGeneratorInterface = class {
 		$(this.ulpObject.panelRight.$el).css("top", "10px");
 		$(this.ulpObject.panelRight.$el).css("right", "10px");
 
+		$(this.ulpObject.panelRight.$el).css("-webkit-transition", "all 0.25s ease");
+		$(this.ulpObject.panelRight.$el).css("-moz-transition", "all 0.25s ease");
+		$(this.ulpObject.panelRight.$el).css("-o-transition", "all 0.25s ease");
+		$(this.ulpObject.panelRight.$el).css("-ms-transition", "all 0.25s ease");
+		$(this.ulpObject.panelRight.$el).css("transition", "all 0.25s ease");
+
 		this.ulpObject.ButtonRegilla = this.appVue.newComponent("c-button").setColor("purple");
 		this.ulpObject.ButtonEscala = this.appVue.newComponent("c-button").setColor("purple");
 
@@ -174,11 +180,11 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.panelPropertyRight.$el).css("right", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("height", "100%");
 		$(this.ulsObject.panelPropertyRight.$el).css("width", "0px");
-		$(this.ulsObject.panelPropertyRight.$el).css("-webkit-transition", "all 1s ease");
-		$(this.ulsObject.panelPropertyRight.$el).css("-moz-transition", "all 1s ease");
-		$(this.ulsObject.panelPropertyRight.$el).css("-o-transition", "all 1s ease");
-		$(this.ulsObject.panelPropertyRight.$el).css("-ms-transition", "all 1s ease");
-		$(this.ulsObject.panelPropertyRight.$el).css("transition", "all 1s ease");
+		$(this.ulsObject.panelPropertyRight.$el).css("-webkit-transition", "all 0.30s ease");
+		$(this.ulsObject.panelPropertyRight.$el).css("-moz-transition", "all 0.30s ease");
+		$(this.ulsObject.panelPropertyRight.$el).css("-o-transition", "all 0.30s ease");
+		$(this.ulsObject.panelPropertyRight.$el).css("-ms-transition", "all 0.30s ease");
+		$(this.ulsObject.panelPropertyRight.$el).css("transition", "all 0.30s ease");
 
 		//components
 		var nameComponents = new Array();
@@ -255,7 +261,8 @@ let UIGeneratorInterface = class {
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen");
 				console.log(UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow);
 				if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
-					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "250px");
+					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
+					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "278px");
 				}
 			} else {
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen_exit");
@@ -265,7 +272,10 @@ let UIGeneratorInterface = class {
 				UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(0);
 				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(0);
 				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(0);
-				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+				if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
+					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "10px");
+				}
 			}
 
 			UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta = !UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta;
@@ -276,8 +286,9 @@ let UIGeneratorInterface = class {
 			$(this.ulsObject.component[currentComponent].$el).click(function(e) {
 				if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
 					UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = true;
+					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "278px");
+					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
 				}
-				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "250px");
 			});
 		}
 	}
@@ -326,7 +337,10 @@ let UIGeneratorInterface = class {
 	}
 
 	panelPropertyRightOut() {
-		UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = false;
-		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+		if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow && !UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta) {
+			UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = false;
+			$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "10px");
+			$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+		}
 	}
 }
