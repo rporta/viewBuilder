@@ -52,7 +52,7 @@ let UIGeneratorInterface = class {
 
 		$(this.ulpObject.panelLeft.$el).css("position", "absolute");
 		$(this.ulpObject.panelLeft.$el).css("top", "10px");
-		$(this.ulpObject.panelLeft.$el).css("left", "50px");
+		$(this.ulpObject.panelLeft.$el).css("left", "88px");
 
 		$(this.ulpObject.panelLeft.$el).css("-webkit-transition", "all 0.25s ease");
 		$(this.ulpObject.panelLeft.$el).css("-moz-transition", "all 0.25s ease");
@@ -140,28 +140,33 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.uiLayerSecondary.$el).css("position", "absolute");
 		$(this.ulsObject.uiLayerSecondary.$el).css("width", "100%");
 		$(this.ulsObject.uiLayerSecondary.$el).css("height", "100%");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-touch-callout", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-khtml-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-moz-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-ms-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
 
-
-		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div").setColor("amber");
+		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div");
 		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor("red");
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelComponentLeft);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelPropertyRight);
 
 
 		//panelComponentLeft
-		this.ulsObject.panelComponentLeft.setShadow(app.shadow[1]);
 		$(this.ulsObject.panelComponentLeft.$el).css("position", "absolute");
+		$(this.ulsObject.panelComponentLeft.$el).css("white-space", "nowrap");
 		$(this.ulsObject.panelComponentLeft.$el).css("top", "0px");
 		$(this.ulsObject.panelComponentLeft.$el).css("left", "0px");
 		$(this.ulsObject.panelComponentLeft.$el).css("height", "100%");
 		$(this.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
 		$(this.ulsObject.panelComponentLeft.$el).css("overflow-x", "hidden");
-		$(this.ulsObject.panelComponentLeft.$el).css("width", "40px");
-		$(this.ulsObject.panelComponentLeft.$el).css("-webkit-transition", "all 0.25s ease");
-		$(this.ulsObject.panelComponentLeft.$el).css("-moz-transition", "all 0.25s ease");
-		$(this.ulsObject.panelComponentLeft.$el).css("-o-transition", "all 0.25s ease");
-		$(this.ulsObject.panelComponentLeft.$el).css("-ms-transition", "all 0.25s ease");
-		$(this.ulsObject.panelComponentLeft.$el).css("transition", "all 0.25s ease");
+		$(this.ulsObject.panelComponentLeft.$el).css("width", "80px");
+		$(this.ulsObject.panelComponentLeft.$el).css("-webkit-transition", "all 0.30s ease");
+		$(this.ulsObject.panelComponentLeft.$el).css("-moz-transition", "all 0.30s ease");
+		$(this.ulsObject.panelComponentLeft.$el).css("-o-transition", "all 0.30s ease");
+		$(this.ulsObject.panelComponentLeft.$el).css("-ms-transition", "all 0.30s ease");
+		$(this.ulsObject.panelComponentLeft.$el).css("transition", "all 0.30s ease");
 
 		//panelPropertyRight
 		$(this.ulsObject.panelPropertyRight.$el).css("position", "absolute");
@@ -180,61 +185,38 @@ let UIGeneratorInterface = class {
 		//components
 		var nameComponents = new Array();
 
-		nameComponents.push("preloader");
-		nameComponents.push("preloaderCircle");
-		nameComponents.push("navbar");
-		nameComponents.push("modal");
-		nameComponents.push("section");
-		nameComponents.push("container");
-		nameComponents.push("div");
-		nameComponents.push("row");
-		nameComponents.push("col");
-		nameComponents.push("header");
-		nameComponents.push("main");
-		nameComponents.push("footer");
-		nameComponents.push("form");
-		nameComponents.push("h");
-		nameComponents.push("p");
-		nameComponents.push("span");
-		nameComponents.push("pre");
-		nameComponents.push("icon");
-		nameComponents.push("blockquotes");
-		nameComponents.push("badge");
-		nameComponents.push("br");
-		nameComponents.push("divider");
-		nameComponents.push("img");
-		nameComponents.push("parallax");
-		nameComponents.push("table");
-		nameComponents.push("collection");
-		nameComponents.push("collapsible");
-		nameComponents.push("button");
-		nameComponents.push("a");
-		nameComponents.push("dropdown");
-		nameComponents.push("inputFields");
-		nameComponents.push("inputTextarea");
-		nameComponents.push("inputSwitch");
-		nameComponents.push("inputCheckbox");
-		nameComponents.push("inputRadio");
-		nameComponents.push("preloaderFull");
-		nameComponents.push("preloaderCircleFull");
-
+		for (var x in this.appVue.$options.components) {
+			if (x.indexOf("c-") !== -1 && x.indexOf("test") === -1) {
+				var name = x.replace("c-", "");
+				nameComponents.push(name);
+			}
+		}
 
 		this.ulsObject.component = new Object();
 
 		for (var x in nameComponents) {
 			var changeColor = (x % 2 === 0);
 			var currentComponent = nameComponents[x];
-			this.ulsObject.component[currentComponent] = this.appVue.newComponent("c-span").setColorText(this.appVue.colorText.bwt[1]);
+			this.ulsObject.component[currentComponent] = this.appVue.newComponent("c-button").setColorText(this.appVue.colorText.bwt[1]);
 			this.ulsObject.panelComponentLeft.create(this.ulsObject.component[currentComponent]);
-			$(this.ulsObject.component[currentComponent].$el).css("display", "flex");
+			this.ulsObject.component[currentComponent].setShadow(this.appVue.shadow[0]);
+			$(this.ulsObject.component[currentComponent].$el).css("display", "block");
 			$(this.ulsObject.component[currentComponent].$el).css("border-left-width", "5px");
 			$(this.ulsObject.component[currentComponent].$el).css("border-left-style", "solid");
+			$(this.ulsObject.component[currentComponent].$el).css("margin-top", "13px");
+			$(this.ulsObject.component[currentComponent].$el).css("margin-bottom", "13px");
+			$(this.ulsObject.component[currentComponent].$el).css("margin-left", "13px");
+			// $(this.ulsObject.component[currentComponent].$el).css("width", "233px"); //boton completo
+			$(this.ulsObject.component[currentComponent].$el).css("width", "52px"); //boton corto
+			$(this.ulsObject.component[currentComponent].$el).css("text-align", "left");
+
 			// this.ulsObject.component[currentComponent].create(this.appVue.newComponent("c-icon").setIcon("cloud").setFloat(this.appVue.float.l));
-			var currentIcon = this.appVue.newComponent("c-icon").setIcon("cloud").setColorText(this.appVue.colorText.bwt[1]);
+			var currentIcon = this.appVue.newComponent("c-icon").setIcon("cloud").setColorText(this.appVue.colorText.bwt[1]).setFloat(this.appVue.float.l);
 			this.ulsObject.component[currentComponent].create(currentIcon);
 			// $(currentIcon.$el).css("display", "inline");
-			$(currentIcon.$el).css("position", "relative");
-			$(currentIcon.$el).css("margin", "6px");
+			// $(currentIcon.$el).css("position", "relative");
+			// $(currentIcon.$el).css("margin", "6px");
+			// $(currentIcon.$el).css("vertical-align", "middle");
 
 			if (changeColor) {
 				this.ulsObject.component[currentComponent].setColor(" " + this.appVue.color.teal[5]);
@@ -264,7 +246,7 @@ let UIGeneratorInterface = class {
 
 			if (UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta) {
 				//volver al modo edicion
-				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "80px");
 				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(1);
@@ -285,23 +267,33 @@ let UIGeneratorInterface = class {
 		});
 	}
 	uiLayerSecondaryEvents() {
+
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
 		$(this.ulsObject.panelComponentLeft.$el).mouseover(function(e) {
 			if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
 				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
-				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "185px");
-				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "195px");
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "270px");
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "scroll");
-				UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[3]);
+				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "278px");
+				for (var x in UIGeneratorInterface.UI.ulsObject.component) {
+					var currentComponent = x;
+					$(UIGeneratorInterface.UI.ulsObject.component[currentComponent].$el).css("width", "233px"); //boton completo
+				}
 			}
 		});
 		$(this.ulsObject.panelComponentLeft.$el).mouseout(function(e) {
 			if (!UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
 				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
-				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "40px");
+				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "80px");
+				// $(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "260px");
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
-				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "50px");
-				UIGeneratorInterface.UI.ulsObject.panelComponentLeft.setShadow(app.shadow[0]);
+				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "88px");
+				for (var x in UIGeneratorInterface.UI.ulsObject.component) {
+					var currentComponent = x;
+					console.log(currentComponent);
+					$(UIGeneratorInterface.UI.ulsObject.component[currentComponent].$el).css("width", "52px"); //boton corto
+				}
+
 			}
 		});
 	}
