@@ -21,3 +21,7 @@ main {
 body {
 	overflow: auto !important;
 }
+button {
+	outline:0 none !important;
+}
+
