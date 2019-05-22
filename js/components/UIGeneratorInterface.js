@@ -211,7 +211,7 @@ let UIGeneratorInterface = class {
 			$(this.ulsObject.component[currentComponent].$el).css("text-align", "left");
 
 			// this.ulsObject.component[currentComponent].create(this.appVue.newComponent("c-icon").setIcon("cloud").setFloat(this.appVue.float.l));
-			var currentIcon = this.appVue.newComponent("c-icon").setIcon("cloud").setColorText(this.appVue.colorText.bwt[1]).setFloat(this.appVue.float.l);
+			var currentIcon = this.appVue.newComponent("c-icon").setIcon("extension").setColorText(this.appVue.colorText.bwt[1]).setFloat(this.appVue.float.l);
 			this.ulsObject.component[currentComponent].create(currentIcon);
 			// $(currentIcon.$el).css("display", "inline");
 			// $(currentIcon.$el).css("position", "relative");
