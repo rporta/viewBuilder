@@ -326,6 +326,7 @@ let UIGeneratorInterface = class {
 	}
 
 	panelPropertyRightOut() {
+		UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = false;
 		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
 	}
 }
