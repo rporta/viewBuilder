@@ -380,7 +380,6 @@ let UIGeneratorInterface = class {
 					var defaultValue = d;
 
 					if (disableProperty.indexOf(property) === -1) {
-						var divider = UIGeneratorInterface.UI.appVue.newComponent("c-divider");
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property).setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						switch (type) {
@@ -393,7 +392,7 @@ let UIGeneratorInterface = class {
 								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
 								break;
 							case 'Boolean':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
 								break;
 							case 'Array':
 								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
@@ -410,9 +409,9 @@ let UIGeneratorInterface = class {
 
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]).setFloat(UIGeneratorInterface.UI.appVue.float.l);
 
-						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3)).setColor(UIGeneratorInterface.UI.appVue.color.indigo[5]);
-						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("margin", "0px");
-						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("padding", "10px");
+						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3)).setColor(UIGeneratorInterface.UI.appVue.color.indigo[5]).setCardpanel(1);
+						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("margin-top", "0px");
+						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("padding", "12px");
 						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
 						componentContainer.create(currentIcon);
 						componentContainer.create(componentProperty);
