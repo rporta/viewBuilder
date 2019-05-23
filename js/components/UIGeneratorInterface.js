@@ -134,11 +134,11 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.uiLayerSecondary.$el).css("width", "100%");
 		$(this.ulsObject.uiLayerSecondary.$el).css("height", "100%");
 		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-touch-callout", "none");
-		// $(this.ulsObject.uiLayerSecondary.$el).css("-webkit-user-select", "none");
-		// $(this.ulsObject.uiLayerSecondary.$el).css("-khtml-user-select", "none");
-		// $(this.ulsObject.uiLayerSecondary.$el).css("-moz-user-select", "none");
-		// $(this.ulsObject.uiLayerSecondary.$el).css("-ms-user-select", "none");
-		// $(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-khtml-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-moz-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("-ms-user-select", "none");
+		$(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
 
 		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div");
 		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor("red");
@@ -162,10 +162,12 @@ let UIGeneratorInterface = class {
 
 		//panelPropertyRight
 		$(this.ulsObject.panelPropertyRight.$el).css("position", "absolute");
-		$(this.ulsObject.panelPropertyRight.$el).css("white-space", "nowrap");
+		// $(this.ulsObject.panelPropertyRight.$el).css("white-space", "nowrap");
 		$(this.ulsObject.panelPropertyRight.$el).css("top", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("right", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("height", "100%");
+		$(this.ulsObject.panelPropertyRight.$el).css("overflow-y", "scroll");
+		// $(this.ulsObject.panelPropertyRight.$el).css("overflow-x", "hidden");
 		$(this.ulsObject.panelPropertyRight.$el).css("width", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("-webkit-transition", "all 0.30s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("-moz-transition", "all 0.30s ease");
@@ -339,44 +341,99 @@ let UIGeneratorInterface = class {
 		}
 	}
 	panelPropertyRightUpdate(e) {
+		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
+		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
 		if (e.currentTarget.__vue__._isMounted && e.currentTarget.__vue__._isVue) {
-			var currentNameComponent = 'c-' + e.currentTarget.__vue__.$parent.text;
-			var currentComponent = UIGeneratorInterface.UI.appVue.$options.components[currentNameComponent];
-			var allProperty = currentComponent.options.props;
-			UIGeneratorInterface.UI.ulsObject.div.clearVue();
 
-			var disableProperty = new Array();
-			disableProperty.push('space');
-			disableProperty.push('percentage');
-			disableProperty.push('menuD');
-			disableProperty.push('menuM');
-			disableProperty.push('inputLabelId');
-			disableProperty.push('id');
-			disableProperty.push('row');
-			disableProperty.push('idA');
-			disableProperty.push('dropdown');
 
-			for (var x in allProperty) {
-				var p = x.substr(1);
-				var t = allProperty[x].type.name;
-				if (t === "Array") {
-					var d = allProperty[x].default();
-				} else {
+			setTimeout(function() {
+				UIGeneratorInterface.UI.ulsObject.div.clearVue();
+				var currentNameComponent = 'c-' + e.currentTarget.__vue__.$parent.text;
+				var currentComponent = UIGeneratorInterface.UI.appVue.$options.components[currentNameComponent];
+				var allProperty = currentComponent.options.props;
+				var disableProperty = new Array();
+				disableProperty.push('space');
+				disableProperty.push('percentage');
+				disableProperty.push('menuD');
+				disableProperty.push('menuM');
+				disableProperty.push('inputLabelId');
+				disableProperty.push('id');
+				disableProperty.push('row');
+				disableProperty.push('idA');
+				disableProperty.push('dropdown');
 
-					var d = allProperty[x].default;
+				for (var x in allProperty) {
+
+					var p = x.substr(1);
+					var t = allProperty[x].type.name;
+					if (t === "Array") {
+						var d = allProperty[x].default();
+					} else {
+
+						var d = allProperty[x].default;
+					}
+
+					var property = p;
+					var type = t;
+					var defaultValue = d;
+
+					if (disableProperty.indexOf(property) === -1) {
+						// var divider = UIGeneratorInterface.UI.appVue.newComponent("c-divider");
+						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
+						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property);
+						switch (type) {
+							case 'String':
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								$(componentValue.$el).css("margin-top", "0px");
+								$(componentValue.$el).css("margin-bottom", "0px");
+								break;
+							case 'Number':
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+								break;
+							case 'Boolean':
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								break;
+							case 'Array':
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								break;
+							case 'Object':
+								break;
+							case 'Date':
+								break;
+							case 'Function':
+								break;
+							case 'Symbol':
+								break;
+						}
+
+						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]).setFloat(UIGeneratorInterface.UI.appVue.float.l);
+
+						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3));
+						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
+						// UIGeneratorInterface.UI.ulsObject.div.create(divider);
+						componentContainer.create(currentIcon);
+						componentContainer.create(componentProperty);
+						componentContainer.create(componentValue);
+						$(currentIcon.$el).css("margin-left", "10px");
+						$(currentIcon.$el).css("margin-right", "10px");
+						$(currentIcon.$el).css("flex", "0 0 0%");
+
+						$(componentContainer.$el).css("align-items", "center");
+						$(componentContainer.$el).css("display", "flex");
+						$(componentProperty.$el).css("margin-right", "10px");
+						$(componentProperty.$el).css("flex", "0 0 0%");
+						$(componentValue.$el).css("flex", "2");
+
+						$(componentValue.$el).removeClass("input-field");
+						setTimeout(function() {
+							UIGeneratorInterface.UI.ulsObject.div.setShow(1);
+							$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
+						}, 500);
+					}
+
 				}
+			}, 500);
 
-				var property = p;
-				var type = t;
-				var defaultValue = d;
-
-				if (disableProperty.indexOf(property) === -1) {
-					var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property);
-
-					UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.substr(2));
-					UIGeneratorInterface.UI.ulsObject.div.create(componentProperty);
-				}
-			}
 		}
 
 	}

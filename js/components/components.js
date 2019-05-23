@@ -2768,7 +2768,6 @@ var inputSwitch = new configComponent({
 			text: this.ptext,
 			color: this.pcolor,
 			colorText: this.pcolorText,
-			text: this.ptext,
 			float: this.pfloat,
 			shadow: this.pshadow,
 			truncate: this.ptruncate,
@@ -2791,7 +2790,7 @@ var inputSwitch = new configComponent({
 			default: null,
 		},
 		ptext: {
-			type: String,
+			type: Array,
 			required: false,
 			default: function() {
 				return new Array("Off", "On")
@@ -2803,11 +2802,6 @@ var inputSwitch = new configComponent({
 			default: null,
 		},
 		pcolorText: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		ptext: {
 			type: String,
 			required: false,
 			default: null,
