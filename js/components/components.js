@@ -2607,7 +2607,7 @@ var inputFields = new configComponent({
 	},
 	template: '<transition name="fade">\
 	<div class="input-field" key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">\
-	<input v-bind:value="this.value" v-bind:name="this.name" v-bind:id="this.generateInputLabelId(5)" v-bind:type="generateType()" class="validate">\
+	<input v-bind:value="this.value" v-bind:name="this.name" v-bind:id="this.generateInputLabelId(5)" v-bind:type="generateType()" class="validate" v-bind:class="this.setClass()">\
 	<label v-bind:for="this.inputLabelId">{{this.text}}</label>\
 	</div>\
 	</transition>',

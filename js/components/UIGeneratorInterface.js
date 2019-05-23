@@ -141,7 +141,7 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
 
 		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div");
-		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor("red");
+		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor(this.appVue.color.indigo[7]);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelComponentLeft);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelPropertyRight);
 
@@ -177,6 +177,7 @@ let UIGeneratorInterface = class {
 
 		//object : panelPropertyRight
 		this.ulsObject.p = this.appVue.newComponent("c-p").setColorText(this.appVue.colorText.bwt[1]).setTextAling(this.appVue.textAling.c).setShow(0);
+		456
 		this.ulsObject.div = this.appVue.newComponent("c-div").setShow(0);
 		this.ulsObject.panelPropertyRight.create(this.ulsObject.p);
 		this.ulsObject.panelPropertyRight.create(this.ulsObject.div);
@@ -343,6 +344,7 @@ let UIGeneratorInterface = class {
 	panelPropertyRightUpdate(e) {
 		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+		$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "10px");
 		if (e.currentTarget.__vue__._isMounted && e.currentTarget.__vue__._isVue) {
 
 
@@ -361,9 +363,9 @@ let UIGeneratorInterface = class {
 				disableProperty.push('row');
 				disableProperty.push('idA');
 				disableProperty.push('dropdown');
-
+				var ff = 0;
 				for (var x in allProperty) {
-
+					var changeColor = (ff % 2 === 0);
 					var p = x.substr(1);
 					var t = allProperty[x].type.name;
 					if (t === "Array") {
@@ -378,12 +380,12 @@ let UIGeneratorInterface = class {
 					var defaultValue = d;
 
 					if (disableProperty.indexOf(property) === -1) {
-						// var divider = UIGeneratorInterface.UI.appVue.newComponent("c-divider");
+						var divider = UIGeneratorInterface.UI.appVue.newComponent("c-divider");
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
-						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property);
+						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property).setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						switch (type) {
 							case 'String':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 								$(componentValue.$el).css("margin-top", "0px");
 								$(componentValue.$el).css("margin-bottom", "0px");
 								break;
@@ -391,10 +393,10 @@ let UIGeneratorInterface = class {
 								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
 								break;
 							case 'Boolean':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 								break;
 							case 'Array':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields");
+								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 								break;
 							case 'Object':
 								break;
@@ -408,9 +410,10 @@ let UIGeneratorInterface = class {
 
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]).setFloat(UIGeneratorInterface.UI.appVue.float.l);
 
-						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3));
+						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3)).setColor(UIGeneratorInterface.UI.appVue.color.indigo[5]);
+						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("margin", "0px");
+						$(UIGeneratorInterface.UI.ulsObject.p.$el).css("padding", "10px");
 						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
-						// UIGeneratorInterface.UI.ulsObject.div.create(divider);
 						componentContainer.create(currentIcon);
 						componentContainer.create(componentProperty);
 						componentContainer.create(componentValue);
@@ -425,12 +428,20 @@ let UIGeneratorInterface = class {
 						$(componentValue.$el).css("flex", "2");
 
 						$(componentValue.$el).removeClass("input-field");
+
+						if (changeColor) {
+							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[7]);
+						} else {
+							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[9]);
+						}
+
 						setTimeout(function() {
 							UIGeneratorInterface.UI.ulsObject.div.setShow(1);
 							$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
+							$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "278px");
 						}, 500);
 					}
-
+					ff++;
 				}
 			}, 500);
 
