@@ -101,7 +101,7 @@ let configComponent = class {
 			if (!b.$el) {
 				b.$mount();
 			}
-			$(b).empty();
+			$(b.$el).empty();
 		}
 		setMethods.binaryCompare = function(a, b) {
 			return a.localeCompare(b, 'es', {
@@ -1157,7 +1157,7 @@ var main = new configComponent({
 			required: false,
 			default: null,
 		},
-		fploat: {
+		pfloat: {
 			type: String,
 			required: false,
 			default: null,
@@ -1167,7 +1167,7 @@ var main = new configComponent({
 			required: false,
 			default: null,
 		},
-		tpruncate: {
+		ptruncate: {
 			type: Boolean,
 			required: false,
 			default: false,
@@ -1334,7 +1334,7 @@ var h = new configComponent({
 			required: false,
 			default: null,
 		},
-		fploat: {
+		pfloat: {
 			type: String,
 			required: false,
 			default: null,
@@ -4034,11 +4034,34 @@ var preloaderCircleFull = new configComponent({
 	name: "c-preloader-circle-full",
 	data: function() {
 		return {
-			colorsHexa: "red",
-			size: "big",
-			show: true,
-			sectionColor: "",
+			colorsHexa: this.pcolorsHexa,
+			size: this.psize,
+			show: this.pshow,
+			sectionColor: this.psectionColor,
 		}
+	},
+	props: {
+		psectionColor: {
+			type: String,
+			required: false,
+			default: "",
+		},
+		pshow: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
+		pcolorsHexa: {
+			type: String,
+			required: false,
+			default: "red",
+		},
+		psize: {
+			type: String,
+			required: false,
+			default: "big",
+		},
+
 	},
 	methods: {
 		setColorHexa: function(arg) {

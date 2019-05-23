@@ -38,14 +38,11 @@ let UIGeneratorInterface = class {
 		this.ulpObject.panelLeft = this.appVue.newComponent("c-div");
 		this.ulpObject.panelRight = this.appVue.newComponent("c-div");
 
-
 		this.appVue.create(this.ulpObject.uiLayerPrimary);
 
 		$(this.ulpObject.uiLayerPrimary.$el).css("display", "flex");
 		$(this.ulpObject.uiLayerPrimary.$el).css("position", "absolute");
 		$(this.ulpObject.uiLayerPrimary.$el).css("width", "100%");
-		// $(this.ulpObject.uiLayerPrimary.$el).css("height", "100%");
-		// $(this.ulpObject.uiLayerPrimary.$el).css("opacity", " 0.5");
 
 		this.ulpObject.uiLayerPrimary.create(this.ulpObject.panelLeft);
 		this.ulpObject.uiLayerPrimary.create(this.ulpObject.panelRight);
@@ -59,7 +56,6 @@ let UIGeneratorInterface = class {
 		$(this.ulpObject.panelLeft.$el).css("-o-transition", "all 0.25s ease");
 		$(this.ulpObject.panelLeft.$el).css("-ms-transition", "all 0.25s ease");
 		$(this.ulpObject.panelLeft.$el).css("transition", "all 0.25s ease");
-
 
 		$(this.ulpObject.panelRight.$el).css("position", "absolute");
 		$(this.ulpObject.panelRight.$el).css("top", "10px");
@@ -89,33 +85,21 @@ let UIGeneratorInterface = class {
 
 		$(this.ulpObject.ButtonRegilla.$el).css("position", "relative");
 		$(this.ulpObject.ButtonRegilla.$el).css("margin", "2.5px");
-		// $(this.ulpObject.ButtonRegilla.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonRegilla.$el).css("left", "25px");
 
 		$(this.ulpObject.ButtonEscala.$el).css("position", "relative");
 		$(this.ulpObject.ButtonEscala.$el).css("margin", "2px");
-		// $(this.ulpObject.ButtonEscala.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonEscala.$el).css("left", "25px");
 
 		$(this.ulpObject.ButtonAtras.$el).css("position", "relative");
 		$(this.ulpObject.ButtonAtras.$el).css("margin", "2.5px");
-		// $(this.ulpObject.ButtonAtras.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonAtras.$el).css("left", "25px");
 
 		$(this.ulpObject.ButtonAdelante.$el).css("position", "relative");
 		$(this.ulpObject.ButtonAdelante.$el).css("margin", "2.5px");
-		// $(this.ulpObject.ButtonAdelante.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonAdelante.$el).css("left", "25px");
 
 		$(this.ulpObject.ButtonGuardar.$el).css("position", "relative");
 		$(this.ulpObject.ButtonGuardar.$el).css("margin", "2.5px");
-		// $(this.ulpObject.ButtonGuardar.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonGuardar.$el).css("left", "25px");
 
 		$(this.ulpObject.ButtonPantallaCompleta.$el).css("position", "relative");
 		$(this.ulpObject.ButtonPantallaCompleta.$el).css("margin", "2.5px");
-		// $(this.ulpObject.ButtonPantallaCompleta.$el).css("top", "25px");
-		// $(this.ulpObject.ButtonPantallaCompleta.$el).css("left", "25px");
 
 		this.ulpObject.IconRegilla = this.appVue.newComponent("c-icon").setIcon("apps");
 		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon").setIcon("open_in_new");
@@ -140,19 +124,21 @@ let UIGeneratorInterface = class {
 		this.ulsProperty = new Object();
 		this.ulsProperty.panelComponentLeftShort = true;
 		this.ulsProperty.panelPropertyRightShow = false;
+
 		//uiLayerSecondary
 		this.ulsObject.uiLayerSecondary = this.appVue.newComponent("c-div").setColor("blue");
 		this.appVue.create(this.ulsObject.uiLayerSecondary);
+
 		$(this.ulsObject.uiLayerSecondary.$el).css("display", "flex");
 		$(this.ulsObject.uiLayerSecondary.$el).css("position", "absolute");
 		$(this.ulsObject.uiLayerSecondary.$el).css("width", "100%");
 		$(this.ulsObject.uiLayerSecondary.$el).css("height", "100%");
 		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-touch-callout", "none");
-		$(this.ulsObject.uiLayerSecondary.$el).css("-webkit-user-select", "none");
-		$(this.ulsObject.uiLayerSecondary.$el).css("-khtml-user-select", "none");
-		$(this.ulsObject.uiLayerSecondary.$el).css("-moz-user-select", "none");
-		$(this.ulsObject.uiLayerSecondary.$el).css("-ms-user-select", "none");
-		$(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
+		// $(this.ulsObject.uiLayerSecondary.$el).css("-webkit-user-select", "none");
+		// $(this.ulsObject.uiLayerSecondary.$el).css("-khtml-user-select", "none");
+		// $(this.ulsObject.uiLayerSecondary.$el).css("-moz-user-select", "none");
+		// $(this.ulsObject.uiLayerSecondary.$el).css("-ms-user-select", "none");
+		// $(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
 
 		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div");
 		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor("red");
@@ -176,6 +162,7 @@ let UIGeneratorInterface = class {
 
 		//panelPropertyRight
 		$(this.ulsObject.panelPropertyRight.$el).css("position", "absolute");
+		$(this.ulsObject.panelPropertyRight.$el).css("white-space", "nowrap");
 		$(this.ulsObject.panelPropertyRight.$el).css("top", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("right", "0px");
 		$(this.ulsObject.panelPropertyRight.$el).css("height", "100%");
@@ -185,6 +172,12 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.panelPropertyRight.$el).css("-o-transition", "all 0.30s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("-ms-transition", "all 0.30s ease");
 		$(this.ulsObject.panelPropertyRight.$el).css("transition", "all 0.30s ease");
+
+		//object : panelPropertyRight
+		this.ulsObject.p = this.appVue.newComponent("c-p").setColorText(this.appVue.colorText.bwt[1]).setTextAling(this.appVue.textAling.c).setShow(0);
+		this.ulsObject.div = this.appVue.newComponent("c-div").setShow(0);
+		this.ulsObject.panelPropertyRight.create(this.ulsObject.p);
+		this.ulsObject.panelPropertyRight.create(this.ulsObject.div);
 
 		//components
 		var nameComponents = new Array();
@@ -210,22 +203,15 @@ let UIGeneratorInterface = class {
 			$(this.ulsObject.component[currentComponent].$el).css("margin-top", "13px");
 			$(this.ulsObject.component[currentComponent].$el).css("margin-bottom", "13px");
 			$(this.ulsObject.component[currentComponent].$el).css("margin-left", "13px");
-			// $(this.ulsObject.component[currentComponent].$el).css("width", "233px"); //boton completo
 			$(this.ulsObject.component[currentComponent].$el).css("width", "52px"); //boton corto
 			$(this.ulsObject.component[currentComponent].$el).css("text-align", "left");
 
-			// this.ulsObject.component[currentComponent].create(this.appVue.newComponent("c-icon").setIcon("cloud").setFloat(this.appVue.float.l));
 			var currentIcon = this.appVue.newComponent("c-icon").setIcon("extension").setColorText(this.appVue.colorText.bwt[1]).setFloat(this.appVue.float.l);
 			this.ulsObject.component[currentComponent].create(currentIcon);
-			// $(currentIcon.$el).css("display", "inline");
-			// $(currentIcon.$el).css("position", "relative");
-			// $(currentIcon.$el).css("margin", "6px");
-			// $(currentIcon.$el).css("vertical-align", "middle");
 
 			if (changeColor) {
 				this.ulsObject.component[currentComponent].setColor(" " + this.appVue.color.teal[5]);
 				$(this.ulsObject.component[currentComponent].$el).css("border-left-color", this.appVue.colorHexa.teal[3]);
-
 			} else {
 				this.ulsObject.component[currentComponent].setColor(this.appVue.color.teal[8]);
 				$(this.ulsObject.component[currentComponent].$el).css("border-left-color", this.appVue.colorHexa.teal[4]);
@@ -251,6 +237,7 @@ let UIGeneratorInterface = class {
 		$(this.ulpObject.ButtonPantallaCompleta.$el).click(function(e) {
 
 			if (UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta) {
+
 				//volver al modo edicion
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "80px");
 				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
@@ -259,13 +246,15 @@ let UIGeneratorInterface = class {
 				UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(1);
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen");
-				console.log(UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow);
 				if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
 					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
 					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "278px");
+					UIGeneratorInterface.UI.ulsObject.p.setShow(1);
+					UIGeneratorInterface.UI.ulsObject.div.setShow(1);
 				}
 			} else {
 				UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen_exit");
+
 				//poner en pantalla completa
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "0px");
 				UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(0);
@@ -275,6 +264,8 @@ let UIGeneratorInterface = class {
 				if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
 					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
 					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "10px");
+					UIGeneratorInterface.UI.ulsObject.p.setShow(0);
+					UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 				}
 			}
 
@@ -284,10 +275,13 @@ let UIGeneratorInterface = class {
 		for (var x in this.ulsObject.component) {
 			var currentComponent = x;
 			$(this.ulsObject.component[currentComponent].$el).click(function(e) {
+				UIGeneratorInterface.UI.panelPropertyRightUpdate(e);
 				if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
 					UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = true;
 					$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "278px");
 					$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "270px");
+					UIGeneratorInterface.UI.ulsObject.p.setShow(1);
+					UIGeneratorInterface.UI.ulsObject.div.setShow(1);
 				}
 			});
 		}
@@ -297,7 +291,7 @@ let UIGeneratorInterface = class {
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
 		$(this.ulsObject.panelComponentLeft.$el).mouseover(function(e) {
 			if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
-				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
+				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = false;
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "270px");
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "scroll");
 				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "278px");
@@ -309,9 +303,8 @@ let UIGeneratorInterface = class {
 		});
 		$(this.ulsObject.panelComponentLeft.$el).mouseout(function(e) {
 			if (!UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
-				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = !UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort;
+				UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = true;
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "80px");
-				// $(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("width", "260px");
 				$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el).css("overflow-y", "hidden");
 				$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el).css("left", "88px");
 				for (var x in UIGeneratorInterface.UI.ulsObject.component) {
@@ -341,6 +334,50 @@ let UIGeneratorInterface = class {
 			UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = false;
 			$(UIGeneratorInterface.UI.ulpObject.panelRight.$el).css("right", "10px");
 			$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el).css("width", "0px");
+			UIGeneratorInterface.UI.ulsObject.p.setShow(0);
+			UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 		}
+	}
+	panelPropertyRightUpdate(e) {
+		if (e.currentTarget.__vue__._isMounted && e.currentTarget.__vue__._isVue) {
+			var currentNameComponent = 'c-' + e.currentTarget.__vue__.$parent.text;
+			var currentComponent = UIGeneratorInterface.UI.appVue.$options.components[currentNameComponent];
+			var allProperty = currentComponent.options.props;
+			UIGeneratorInterface.UI.ulsObject.div.clearVue();
+
+			var disableProperty = new Array();
+			disableProperty.push('space');
+			disableProperty.push('percentage');
+			disableProperty.push('menuD');
+			disableProperty.push('menuM');
+			disableProperty.push('inputLabelId');
+			disableProperty.push('id');
+			disableProperty.push('row');
+			disableProperty.push('idA');
+			disableProperty.push('dropdown');
+
+			for (var x in allProperty) {
+				var p = x.substr(1);
+				var t = allProperty[x].type.name;
+				if (t === "Array") {
+					var d = allProperty[x].default();
+				} else {
+
+					var d = allProperty[x].default;
+				}
+
+				var property = p;
+				var type = t;
+				var defaultValue = d;
+
+				if (disableProperty.indexOf(property) === -1) {
+					var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property);
+
+					UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent);
+					UIGeneratorInterface.UI.ulsObject.div.create(componentProperty);
+				}
+			}
+		}
+
 	}
 }
