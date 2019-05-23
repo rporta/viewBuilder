@@ -373,7 +373,7 @@ let UIGeneratorInterface = class {
 				if (disableProperty.indexOf(property) === -1) {
 					var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p").setText(property);
 
-					UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent);
+					UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.substr(2));
 					UIGeneratorInterface.UI.ulsObject.div.create(componentProperty);
 				}
 			}
