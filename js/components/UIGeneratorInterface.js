@@ -141,7 +141,7 @@ let UIGeneratorInterface = class {
 		$(this.ulsObject.uiLayerSecondary.$el).css("user-select", "none");
 
 		this.ulsObject.panelComponentLeft = this.appVue.newComponent("c-div");
-		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor(this.appVue.color.indigo[7]);
+		this.ulsObject.panelPropertyRight = this.appVue.newComponent("c-div").setColor(this.appVue.color.indigo[7]).setShadow(this.appVue.shadow[0]);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelComponentLeft);
 		this.ulsObject.uiLayerSecondary.create(this.ulsObject.panelPropertyRight);
 
