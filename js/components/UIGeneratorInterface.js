@@ -177,7 +177,7 @@ let UIGeneratorInterface = class {
 
 		//object : panelPropertyRight
 		this.ulsObject.p = this.appVue.newComponent("c-p").setColorText(this.appVue.colorText.bwt[1]).setTextAling(this.appVue.textAling.c).setShow(0);
-		456
+
 		this.ulsObject.div = this.appVue.newComponent("c-div").setShow(0);
 		this.ulsObject.panelPropertyRight.create(this.ulsObject.p);
 		this.ulsObject.panelPropertyRight.create(this.ulsObject.div);
@@ -433,6 +433,15 @@ let UIGeneratorInterface = class {
 						} else {
 							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[9]);
 						}
+
+						//set Icons
+						if ("show" === property) currentIcon.setIcon("filter_none");
+						if (/color/.exec(property) !== null) currentIcon.setIcon("format_paint");
+						if ("mode" === property) currentIcon.setIcon("swap_horiz");
+						if ("progress" === property) currentIcon.setIcon("trending_flat");
+						if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
+
+
 
 						setTimeout(function() {
 							UIGeneratorInterface.UI.ulsObject.div.setShow(1);
