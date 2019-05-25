@@ -412,22 +412,23 @@ let UIGeneratorInterface = class {
 			if (UIGeneratorInterface.UI.color) {
 				delete UIGeneratorInterface.UI.color;
 			}
-			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.colorHexa;
+			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 		}
 		if (property === "colorText") {
 			if (UIGeneratorInterface.UI.color) {
 				delete UIGeneratorInterface.UI.color;
 			}
-			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.colorText;
+			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 		}
 		componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
 		return true;
 	}
 	resolveColor(e) {
-		if (e.target.__vue__) {
-			var colorSet = e.target.__vue__.color;
-			UIGeneratorInterface.UI.componentValue.setColor(colorSet);
-		}
+		console.log(e, UIGeneratorInterface.UI.panelColor);
+		// if (e.target.__vue__) {
+		// var colorSet = e.target.__vue__.color;
+		// UIGeneratorInterface.UI.componentValue.setColor(colorSet);
+		// }
 		UIGeneratorInterface.UI.panelColor.setShow(0);
 	}
 	resolvePanelColor(e) {
@@ -441,7 +442,7 @@ let UIGeneratorInterface = class {
 			.setShow(0);
 		UIGeneratorInterface.UI.panelColorTitle = UIGeneratorInterface.UI.appVue.newComponent("c-p").setColor(UIGeneratorInterface.UI.appVue.color.blue[7])
 			.setShow(0)
-			.setText("Paleta De Colores")
+			.setText("Paleta de colores")
 			.setTextAling(UIGeneratorInterface.UI.appVue.textAling.c)
 			.setCardpanel(1)
 			.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
