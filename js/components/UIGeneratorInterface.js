@@ -342,8 +342,7 @@ let UIGeneratorInterface = class {
 				if (UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort) {
 					UIGeneratorInterface.UI.ulsProperty.panelComponentLeftShort = false;
 					$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el)
-						.css("width", "270px");
-					$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el)
+						.css("width", "270px")
 						.css("overflow-y", "scroll");
 					$(UIGeneratorInterface.UI.ulpObject.panelLeft.$el)
 						.css("left", "278px");
@@ -451,7 +450,6 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.panelColorTitle);
 		// UIGeneratorInterface.UI.panelColor.$el.id = UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color';
 		// $(UIGeneratorInterface.UI.panelColor.$el).attr("id", UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color');
-		console.log(UIGeneratorInterface.UI.panelColor.$el.id);
 		$(UIGeneratorInterface.UI.panelColor.$el)
 			.css("z-index", "1")
 			.css("width", "768px")
@@ -466,12 +464,14 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.ulsObject.colors = new Object();
 		UIGeneratorInterface.UI.panelColor.setShow(1);
 		UIGeneratorInterface.UI.panelColorTitle.setShow(1);
+
+		UIGeneratorInterface.UI.ulsObject.componentColor = new Object();
 		for (var x in UIGeneratorInterface.UI.color) {
 			var currentColor = UIGeneratorInterface.UI.color[x];
 			for (var j in currentColor) {
 				var currentRangeColor = currentColor[j];
-				UIGeneratorInterface.UI.ulsObject.component[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
-				UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.component[currentRangeColor]);
+				UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
+				UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]);
 				UIGeneratorInterface.UI.panelColor.$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
 			}
 		}
