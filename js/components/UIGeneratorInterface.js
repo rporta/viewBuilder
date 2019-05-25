@@ -400,24 +400,68 @@ let UIGeneratorInterface = class {
 			UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 		}
 	}
-	panelColorInitialize(componentValue) {
-		UIGeneratorInterface.UI.panelColor = new Object();
-		UIGeneratorInterface.UI.panelColor.name = preloaderFull.$el.id;
-		// console.log(UIGeneratorInterface.UI.panelColor.name);
-		UIGeneratorInterface.UI.panelColor[UIGeneratorInterface.UI.panelColor.name] = UIGeneratorInterface.UI.appVue.newComponent("c-div")
-			.setText("fafa")
-			.setColor(UIGeneratorInterface.UI.appVue.color.red[7])
-			.setShow(0)
-			.setCardpanel(1);
-		UIGeneratorInterface.UI.appVue.create(UIGeneratorInterface.UI.panelColor[UIGeneratorInterface.UI.panelColor.name]);
-		$(UIGeneratorInterface.UI.panelColor[UIGeneratorInterface.UI.panelColor.name].$el)
-			.css("z-index", "1")
-			.css("position", "absolute");
+	panelColorInitialize(property, componentValue) {
+		UIGeneratorInterface.UI.componentValue = componentValue;
+
+		if (property === "color") {
+			if (UIGeneratorInterface.UI.color) {
+				delete UIGeneratorInterface.UI.color;
+			}
+			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
+		}
+		if (property === "colorHexa") {
+			if (UIGeneratorInterface.UI.color) {
+				delete UIGeneratorInterface.UI.color;
+			}
+			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.colorHexa;
+		}
+		if (property === "colorText") {
+			if (UIGeneratorInterface.UI.color) {
+				delete UIGeneratorInterface.UI.color;
+			}
+			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.colorText;
+		}
 		componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
 		return true;
 	}
-	resolvePanelColor() {
-		UIGeneratorInterface.UI.panelColor[UIGeneratorInterface.UI.panelColor.name].setShow(1);
+	resolveColor(e) {
+		if (e.target.__vue__) {
+			var colorSet = e.target.__vue__.color;
+			UIGeneratorInterface.UI.componentValue.setColor(colorSet);
+		}
+		UIGeneratorInterface.UI.panelColor.setShow(0);
+	}
+	resolvePanelColor(e) {
+		if (UIGeneratorInterface.UI.panelColor) {
+			UIGeneratorInterface.UI.panelColor.$el.remove();
+			delete UIGeneratorInterface.UI.panelColor;
+		}
+
+		UIGeneratorInterface.UI.panelColor = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.red[7])
+			.setShow(0)
+			.setCardpanel(1);
+		UIGeneratorInterface.UI.appVue.create(UIGeneratorInterface.UI.panelColor);
+		// UIGeneratorInterface.UI.panelColor.$el.id = UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color';
+		// $(UIGeneratorInterface.UI.panelColor.$el).attr("id", UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color');
+		console.log(UIGeneratorInterface.UI.panelColor.$el.id);
+		$(UIGeneratorInterface.UI.panelColor.$el)
+			.css("z-index", "1")
+			.css("width", "784px")
+			.css("position", "absolute")
+			.css("top", "50%")
+			.css("left", "50%")
+			.css("transform", "translate(-50%, -50%)");
+		UIGeneratorInterface.UI.ulsObject.colors = new Object();
+		UIGeneratorInterface.UI.panelColor.setShow(1);
+		for (var x in UIGeneratorInterface.UI.color) {
+			var currentColor = UIGeneratorInterface.UI.color[x];
+			for (var j in currentColor) {
+				var currentRangeColor = currentColor[j];
+				UIGeneratorInterface.UI.ulsObject.component[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
+				UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.component[currentRangeColor]);
+				UIGeneratorInterface.UI.panelColor.$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
+			}
+		}
 	}
 	panelPropertyRightUpdate(e) {
 		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
@@ -464,33 +508,38 @@ let UIGeneratorInterface = class {
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						switch (type) {
-							case 'String':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-									.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-								$(componentValue.$el)
-									.css("margin-top", "0px");
-								$(componentValue.$el)
-									.css("margin-bottom", "0px");
-								break;
-							case 'Number':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
-								break;
-							case 'Boolean':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
-								break;
-							case 'Array':
-								var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-									.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-								break;
-							case 'Object':
-								break;
-							case 'Date':
-								break;
-							case 'Function':
-								break;
-							case 'Symbol':
-								break;
+						if (type === 'Array' && /color/.exec(property) !== null) {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
+								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+							// $(componentValue.$el) brush
+							// .css("margin-top", "0px");
+							// $(componentValue.$el)
+							// .css("margin-bottom", "0px");
+						} else {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+						}
+						if (type === 'Number') {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+						}
+						if (type === 'Boolean') {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+						}
+						if (type === 'String') {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
+								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+						}
+
+						if (type === 'Object') {
+
+						}
+						if (type === 'Date') {
+
+						}
+						if (type === 'Function') {
+
+						}
+						if (type === 'Symbol') {
+
 						}
 
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
@@ -526,6 +575,7 @@ let UIGeneratorInterface = class {
 						$(componentProperty.$el)
 							.css("flex", "0 0 0%");
 						$(componentValue.$el)
+							.css("margin-right", "15px")
 							.css("flex", "2");
 
 						$(componentValue.$el)
@@ -541,7 +591,7 @@ let UIGeneratorInterface = class {
 						if ("show" === property) currentIcon.setIcon("filter_none");
 						if (/color/.exec(property) !== null) {
 							currentIcon.setIcon("format_paint");
-							UIGeneratorInterface.UI.panelColorInitialize(componentValue);
+							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue);
 						}
 						if ("mode" === property) currentIcon.setIcon("swap_horiz");
 						if ("progress" === property) currentIcon.setIcon("trending_flat");
