@@ -437,22 +437,35 @@ let UIGeneratorInterface = class {
 			delete UIGeneratorInterface.UI.panelColor;
 		}
 
-		UIGeneratorInterface.UI.panelColor = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.red[7])
+		UIGeneratorInterface.UI.panelColor = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.bwt[2])
+			// .setCardpanel(1)
+			.setShow(0);
+		UIGeneratorInterface.UI.panelColorTitle = UIGeneratorInterface.UI.appVue.newComponent("c-p").setColor(UIGeneratorInterface.UI.appVue.color.blue[7])
 			.setShow(0)
-			.setCardpanel(1);
+			.setText("Paleta De Colores")
+			.setTextAling(UIGeneratorInterface.UI.appVue.textAling.c)
+			.setCardpanel(1)
+			.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+
 		UIGeneratorInterface.UI.appVue.create(UIGeneratorInterface.UI.panelColor);
+		UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.panelColorTitle);
 		// UIGeneratorInterface.UI.panelColor.$el.id = UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color';
 		// $(UIGeneratorInterface.UI.panelColor.$el).attr("id", UIGeneratorInterface.UI.panelColor.$el.id + '-panel-color');
 		console.log(UIGeneratorInterface.UI.panelColor.$el.id);
 		$(UIGeneratorInterface.UI.panelColor.$el)
 			.css("z-index", "1")
-			.css("width", "784px")
+			.css("width", "768px")
 			.css("position", "absolute")
 			.css("top", "50%")
 			.css("left", "50%")
 			.css("transform", "translate(-50%, -50%)");
+		$(UIGeneratorInterface.UI.panelColorTitle.$el)
+			.css("margin-top", "0px")
+			.css("margin-bottom", "0px")
+			.css("padding", "12px");
 		UIGeneratorInterface.UI.ulsObject.colors = new Object();
 		UIGeneratorInterface.UI.panelColor.setShow(1);
+		UIGeneratorInterface.UI.panelColorTitle.setShow(1);
 		for (var x in UIGeneratorInterface.UI.color) {
 			var currentColor = UIGeneratorInterface.UI.color[x];
 			for (var j in currentColor) {
@@ -552,8 +565,7 @@ let UIGeneratorInterface = class {
 							.setColor(UIGeneratorInterface.UI.appVue.color.indigo[5])
 							.setCardpanel(1);
 						$(UIGeneratorInterface.UI.ulsObject.p.$el)
-							.css("margin-top", "0px");
-						$(UIGeneratorInterface.UI.ulsObject.p.$el)
+							.css("margin-top", "0px")
 							.css("padding", "12px");
 						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
 						componentContainer.create(currentIcon);
