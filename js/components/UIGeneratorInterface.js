@@ -32,7 +32,7 @@ let UIGeneratorInterface = class {
 		//parameters config
 		this.ulpProperty = new Object();
 		this.ulpProperty.ButtonPantallaCompleta = false;
-		this.ulpProperty.ButtonRegilla = true;
+		this.ulpProperty.ButtonRegilla = false;
 		this.ulpProperty.ButtonEscala = false;
 
 		this.ulpObject = new Object();
@@ -119,9 +119,9 @@ let UIGeneratorInterface = class {
 
 
 		this.ulpObject.IconRegilla = this.appVue.newComponent("c-icon")
-			.setIcon("grid_on");
+			.setIcon("grid_off");
 		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon")
-			.setIcon("open_in_new");
+			.setIcon("check_box_outline_blank");
 		this.ulpObject.IconAtras = this.appVue.newComponent("c-icon")
 			.setIcon("undo");
 		this.ulpObject.IconAdelante = this.appVue.newComponent("c-icon")
@@ -375,10 +375,10 @@ let UIGeneratorInterface = class {
 		$(this.ulpObject.ButtonEscala.$el).click(function(e) {
 			if (UIGeneratorInterface.UI.ulpProperty.ButtonEscala) {
 				UIGeneratorInterface.UI.ulpProperty.ButtonEscala = false;
-				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("open_in_new");
+				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("check_box_outline_blank");
 			} else {
 				UIGeneratorInterface.UI.ulpProperty.ButtonEscala = true;
-				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("check_box_outline_blank");
+				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("open_in_new");
 			}
 		});
 	}
