@@ -559,7 +559,6 @@ let UIGeneratorInterface = class {
 					if (t === "Array") {
 						var d = allProperty[x].default();
 					} else {
-
 						var d = allProperty[x].default;
 					}
 
@@ -567,7 +566,7 @@ let UIGeneratorInterface = class {
 					var type = t;
 					var defaultValue = d;
 					if (disableProperty.indexOf(property) === -1) {
-						console.log(property, type);
+						// console.log(property, type);
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
@@ -608,7 +607,7 @@ let UIGeneratorInterface = class {
 
 						} else {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]).setValue(defaultValue);
+								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						}
 
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
@@ -702,6 +701,9 @@ let UIGeneratorInterface = class {
 								var current = vectorOptions[xf];
 								componentValue.addOption([current, current]);
 							}
+						} else if (property === "progress" && type === "Number") {
+							// console.log(property, type, defaultValue, componentValue);
+							componentValue.setValue(defaultValue);
 						}
 
 						$(currentIcon.$el)

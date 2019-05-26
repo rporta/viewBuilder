@@ -2782,7 +2782,7 @@ var inputFields = new configComponent({
 	},
 	template: '<transition name="fade">\
 	<div class="input-field" key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">\
-	<input v-bind:value="this.value" v-bind:name="this.name" v-bind:id="this.generateInputLabelId(5)" v-bind:type="generateType()" class="validate" v-bind:class="this.setClass()">\
+	<input v-bind:name="this.name" v-bind:id="this.generateInputLabelId(5)" v-bind:type="generateType()" class="validate" v-bind:class="this.setClass()">\
 	<label v-bind:for="this.inputLabelId">{{this.text}}</label>\
 	</div>\
 	</transition>',
@@ -2811,11 +2811,12 @@ var inputFields = new configComponent({
 		},
 		setValue(arg) {
 			this.value = arg;
+
 			if (!this.$el) {
 				this.$mount();
 			}
-			$(this.$el.children[0].children[0]).prop({
-				value: this.value
+			$(this.$el.children[0]).prop({
+				value: arg
 			});
 			return this;
 		},
