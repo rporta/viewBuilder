@@ -445,29 +445,32 @@ let UIGeneratorInterface = class {
 			}
 		}
 	}
-	panelColorInitialize(property, componentValue) {
+	panelColorInitialize(property, componentValue, componentName) {
 		UIGeneratorInterface.UI.componentValue = componentValue;
-
-		if (property === "color") {
-			if (UIGeneratorInterface.UI.color) {
-				delete UIGeneratorInterface.UI.color;
+		if (/color/i.exec(property) !== null) {
+			if (property === "color") {
+				if (UIGeneratorInterface.UI.color) {
+					delete UIGeneratorInterface.UI.color;
+				}
+				UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 			}
-			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
-		}
-		if (property === "colorHexa") {
-			if (UIGeneratorInterface.UI.color) {
-				delete UIGeneratorInterface.UI.color;
+			if (property === "colorHexa") {
+				if (UIGeneratorInterface.UI.color) {
+					delete UIGeneratorInterface.UI.color;
+				}
+				UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 			}
-			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
-		}
-		if (property === "colorText") {
-			if (UIGeneratorInterface.UI.color) {
-				delete UIGeneratorInterface.UI.color;
+			if (property === "colorText") {
+				if (UIGeneratorInterface.UI.color) {
+					delete UIGeneratorInterface.UI.color;
+				}
+				UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 			}
-			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
+			UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
+			return true;
+		} else {
+			return false;
 		}
-		UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
-		return true;
 	}
 	resolvePanelColor(e) {
 		UIGeneratorInterface.UI.colorEvent = e;
@@ -563,13 +566,13 @@ let UIGeneratorInterface = class {
 					var property = p;
 					var type = t;
 					var defaultValue = d;
-
 					if (disableProperty.indexOf(property) === -1) {
+						// console.log(property, type);
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						if ((type === 'Array' || type === 'String') && /color/.exec(property) !== null) {
+						if ((type === 'Array' || type === 'String') && (/color/i.exec(property) !== null)) {
 							var color;
 							if (UIGeneratorInterface.UI.colorSet) {
 								color = UIGeneratorInterface.UI.colorSet;
@@ -578,18 +581,25 @@ let UIGeneratorInterface = class {
 							}
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
 								.setColorText(color);
-							// $(componentValue.$el) brush
-							// .css("margin-top", "0px");
-							// $(componentValue.$el)
-							// .css("margin-bottom", "0px");
+						} else if (type === 'String' && /textAling|float/.exec(property) !== null) {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+						} else if (type === 'String' && property === "shadow") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+						} else if (type === 'Number' && property === "method") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+						} else if ((type === 'String' || type === 'Number') && property === "size") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+						} else if (type === 'String' && property === "wave") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
 						} else {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
+								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						}
-						if (type === 'Number') {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
-						}
+						// if (type === 'Number') {
+						// var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+						// }
 						if (type === 'Boolean') {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						}
 						// if (type === 'String') {
 						// 	var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
@@ -625,6 +635,60 @@ let UIGeneratorInterface = class {
 						componentContainer.create(currentIcon);
 						componentContainer.create(componentProperty);
 						componentContainer.create(componentValue);
+
+						//set Option c-input-select before mounted
+						if (type === 'String' && /textAling|float/.exec(property) !== null) {
+							componentValue.addOption(["", ""]);
+							for (var xf in UIGeneratorInterface.UI.appVue.textAling) {
+								var current = UIGeneratorInterface.UI.appVue.textAling[xf];
+								// console.log(current);
+								if (/left/.exec(current) !== null) var text = "left";
+								if (/center/.exec(current) !== null) var text = "center";
+								if (/right/.exec(current) !== null) var text = "right";
+								componentValue.addOption([text, current]);
+							}
+							currentIcon.setIcon("text_fields");
+						} else if (type === 'String' && property === "shadow") {
+							componentValue.addOption(["", ""]);
+							for (var xf in UIGeneratorInterface.UI.appVue.shadow) {
+								var text = UIGeneratorInterface.UI.appVue.shadow[xf];
+								componentValue.addOption([xf, text]);
+							}
+						} else if (type === 'Number' && property === "method") {
+							var options = ['GET', 'POST'];
+							for (var xf in options) {
+								var text = options[xf];
+								componentValue.addOption([text, text]);
+							}
+						} else if (type === 'String' && property === "wave") {
+							componentValue.addOption(["", ""]);
+							for (var xf in UIGeneratorInterface.UI.appVue.waves) {
+								var mode = UIGeneratorInterface.UI.appVue.waves[xf];
+								for (var ge in mode) {
+									text = mode[ge];
+									componentValue.addOption([xf + '(' + ge + '): ' + text, text]);
+								}
+							}
+						} else if ((type === 'String' || type === 'Number') && property === "size") {
+							var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
+
+							if (/Icon/i.exec(nameComponent) !== null) {
+								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeIcon;
+							} else if (/Card/i.exec(nameComponent) !== null) {
+								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeCard;
+							} else if (/Preloader/i.exec(nameComponent) !== null) {
+								var vectorOptions = UIGeneratorInterface.UI.appVue.sizePreloader;
+							} else if (/Button/i.exec(nameComponent) !== null) {
+								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeButton;
+							} else if ("H" === nameComponent) {
+								var vectorOptions = [1, 2, 3, 4, 5, 6];
+							}
+							componentValue.addOption(["", ""]);
+							for (var xf in vectorOptions) {
+								var current = vectorOptions[xf];
+								componentValue.addOption([current, current]);
+							}
+						}
 						$(currentIcon.$el)
 							.css("margin-left", "10px");
 						$(currentIcon.$el)
@@ -654,16 +718,18 @@ let UIGeneratorInterface = class {
 						}
 
 						//set Icons
-						if ("show" === property) currentIcon.setIcon("filter_none");
-						if (/color/.exec(property) !== null) {
+						if ("show" === property) currentIcon.setIcon("visibility");
+						if ("shadow" === property) currentIcon.setIcon("filter_none");
+						if (/color/i.exec(property) !== null) {
 							currentIcon.setIcon("format_paint");
-							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue);
+							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3));
 						}
 						if ("mode" === property) currentIcon.setIcon("swap_horiz");
 						if ("progress" === property) currentIcon.setIcon("trending_flat");
 						if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
-
-
+						if (/text/.exec(property) !== null) currentIcon.setIcon("text_fields");
+						if ("valign" === property) currentIcon.setIcon("vertical_align_center");
+						if ("new" === property) currentIcon.setIcon("fiber_new");
 
 						setTimeout(function() {
 							UIGeneratorInterface.UI.ulsObject.div.setShow(1);

@@ -2501,6 +2501,181 @@ var a = new configComponent({
 		},
 	}
 });
+var inputSelect = new configComponent({
+	name: "c-input-select",
+	data: function() {
+		return {
+			inputLabelId: this.pinputLabelId,
+			text: this.ptext,
+			color: this.pcolor,
+			colorText: this.pcolorText,
+			text: this.ptext,
+			float: this.pfloat,
+			shadow: this.pshadow,
+			name: this.pname,
+			truncate: this.ptruncate,
+			cardpanel: this.pcardpanel,
+			hoverable: this.phoverable,
+			container: this.pcontainer,
+			valign: this.pvalign,
+			show: this.pshow,
+			type: this.ptype,
+			value: this.pvalue,
+			option: this.poption,
+		}
+	},
+	props: {
+		pinputLabelId: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		ptext: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pcolor: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pcolorText: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		ptext: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pfloat: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pshadow: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pname: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		ptruncate: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		pcardpanel: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		phoverable: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		pcontainer: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		pvalign: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		pshow: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
+		ptype: {
+			type: Number,
+			required: false,
+			default: 0,
+		},
+		pvalue: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		poption: {
+			type: Array,
+			required: false,
+			default: function() {
+				return new Array()
+			},
+		},
+	},
+	template: '<transition name="fade">\
+		<div class="input-field" key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">\
+			<select v-bind:name="this.name" v-bind:id="this.generateInputLabelId(5)" v-bind:class="this.setClass()">\
+				<option value="" disabled selected>Seleccione una opcion</option>\
+			</select>\
+			<label>{{this.text}}</label>\
+		</div>\
+	</transition>',
+	methods: {
+		generateInputLabelId: function(arg) {
+			this.inputLabelId = app ? this.$options.name + app.generateId(arg) : this.$options.name + this.$root.generateId(arg);
+			return this.inputLabelId;
+		},
+		setClass: function() {
+			var truncate = "truncate";
+			var cardpanel = "card-panel";
+			var hoverable = "hoverable";
+			var valign = "valign-wrapper";
+			var container = "container";
+			return new Array(this.color, this.colorText, this.float, this.shadow, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", this.container ? container : "").join(" ");
+		},
+		generateOptions: function() {
+			var b = this;
+			if (!b.$el) b.$mount();
+			var select = b.$el.children[0];
+			$(select).empty();
+			var option = $('<option>', {
+				value: "Seleccione una opcion",
+				text: "Seleccione una opcion",
+				disabled: "selected"
+			})
+			$(select).append(option);
+			for (x in this.option) {
+				var currentOptionValue = this.option[x];
+				var option = $('<option>', {
+					text: currentOptionValue[0],
+					value: currentOptionValue[1]
+				})
+				$(select).append(option);
+			}
+
+			return this;
+		},
+		addOption: function(arg) {
+			this.option.push(arg);
+			this.generateOptions();
+			return this;
+		},
+		clearOption: function() {
+			this.option = new Array();
+			this.generateOptions();
+			return this;
+		}
+	},
+	mounted: function() {
+		this.$nextTick(function() {
+			$('select').formSelect();
+			// console.log(this.colorText);
+			// console.log(this.pcolorText);
+			$('.select-dropdown.dropdown-trigger').addClass("white-text");
+		});
+	},
+});
 var inputFields = new configComponent({
 	name: "c-input-fields",
 	data: function() {
@@ -2849,7 +3024,7 @@ var inputSwitch = new configComponent({
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" class="switch">\
-	<label>{{this.text[0]}}\
+	<label v-bind:class="this.setClass()">{{this.text[0]}}\
 	<input v-bind:name="this.name" type="checkbox">\
 	<span class="lever"></span>{{this.text[1]}}\
 	</label>\
