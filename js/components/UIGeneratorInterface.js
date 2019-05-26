@@ -32,6 +32,8 @@ let UIGeneratorInterface = class {
 		//parameters config
 		this.ulpProperty = new Object();
 		this.ulpProperty.ButtonPantallaCompleta = false;
+		this.ulpProperty.ButtonRegilla = true;
+		this.ulpProperty.ButtonEscala = false;
 
 		this.ulpObject = new Object();
 		this.ulpObject.uiLayerPrimary = this.appVue.newComponent("c-div")
@@ -361,6 +363,24 @@ let UIGeneratorInterface = class {
 					}
 				});
 		}
+		$(this.ulpObject.ButtonRegilla.$el).click(function(e) {
+			if (UIGeneratorInterface.UI.ulpProperty.ButtonRegilla) {
+				UIGeneratorInterface.UI.ulpProperty.ButtonRegilla = false;
+				UIGeneratorInterface.UI.ulpObject.IconRegilla.setIcon("grid_off");
+			} else {
+				UIGeneratorInterface.UI.ulpProperty.ButtonRegilla = true;
+				UIGeneratorInterface.UI.ulpObject.IconRegilla.setIcon("grid_on");
+			}
+		});
+		$(this.ulpObject.ButtonEscala.$el).click(function(e) {
+			if (UIGeneratorInterface.UI.ulpProperty.ButtonEscala) {
+				UIGeneratorInterface.UI.ulpProperty.ButtonEscala = false;
+				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("open_in_new");
+			} else {
+				UIGeneratorInterface.UI.ulpProperty.ButtonEscala = true;
+				UIGeneratorInterface.UI.ulpObject.IconEscala.setIcon("check_box_outline_blank");
+			}
+		});
 	}
 	uiLayerSecondaryEvents() {
 
