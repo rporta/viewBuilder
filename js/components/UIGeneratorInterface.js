@@ -70,14 +70,12 @@ let UIGeneratorInterface = class {
 			.css("-ms-transition", "all 0.25s ease")
 			.css("transition", "all 0.25s ease");
 
-		this.ulpObject.ButtonRegilla = this.appVue.newComponent("c-button")
-			.setColor("purple");
-		this.ulpObject.ButtonEscala = this.appVue.newComponent("c-button")
-			.setColor("purple");
-
+		this.ulpObject.ButtonRegilla = this.appVue.newComponent("c-button").setColor("purple");
+		this.ulpObject.ButtonEscala = this.appVue.newComponent("c-button").setColor("purple");
 		this.ulpObject.ButtonAtras = this.appVue.newComponent("c-button");
 		this.ulpObject.ButtonAdelante = this.appVue.newComponent("c-button");
 		this.ulpObject.ButtonGuardar = this.appVue.newComponent("c-button");
+		this.ulpObject.ButtonPropiedades = this.appVue.newComponent("c-button").setShow(0);
 		this.ulpObject.ButtonPantallaCompleta = this.appVue.newComponent("c-button");
 
 		this.ulpObject.panelLeft.create(this.ulpObject.ButtonRegilla);
@@ -86,6 +84,7 @@ let UIGeneratorInterface = class {
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAtras);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAdelante);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonGuardar);
+		this.ulpObject.panelRight.create(this.ulpObject.ButtonPropiedades);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonPantallaCompleta);
 
 		$(this.ulpObject.ButtonRegilla.$el)
@@ -108,12 +107,17 @@ let UIGeneratorInterface = class {
 			.css("position", "relative")
 			.css("margin", "2.5px");
 
+		$(this.ulpObject.ButtonPropiedades.$el)
+			.css("position", "relative")
+			.css("margin", "2.5px");
+
 		$(this.ulpObject.ButtonPantallaCompleta.$el)
 			.css("position", "relative")
 			.css("margin", "2.5px");
 
+
 		this.ulpObject.IconRegilla = this.appVue.newComponent("c-icon")
-			.setIcon("apps");
+			.setIcon("grid_on");
 		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon")
 			.setIcon("open_in_new");
 		this.ulpObject.IconAtras = this.appVue.newComponent("c-icon")
@@ -122,6 +126,8 @@ let UIGeneratorInterface = class {
 			.setIcon("redo");
 		this.ulpObject.IconGuardar = this.appVue.newComponent("c-icon")
 			.setIcon("save");
+		this.ulpObject.IconButtonPropiedades = this.appVue.newComponent("c-icon")
+			.setIcon("arrow_forward");
 		this.ulpObject.IconPantallaCompleta = this.appVue.newComponent("c-icon")
 			.setIcon("fullscreen");
 
@@ -130,6 +136,7 @@ let UIGeneratorInterface = class {
 		this.ulpObject.ButtonAtras.create(this.ulpObject.IconAtras);
 		this.ulpObject.ButtonAdelante.create(this.ulpObject.IconAdelante);
 		this.ulpObject.ButtonGuardar.create(this.ulpObject.IconGuardar);
+		this.ulpObject.ButtonPropiedades.create(this.ulpObject.IconButtonPropiedades);
 		this.ulpObject.ButtonPantallaCompleta.create(this.ulpObject.IconPantallaCompleta);
 
 		//esconder capa
@@ -293,6 +300,7 @@ let UIGeneratorInterface = class {
 							.css("right", "278px");
 						UIGeneratorInterface.UI.ulsObject.p.setShow(1);
 						UIGeneratorInterface.UI.ulsObject.div.setShow(1);
+						UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(1);
 					}
 				} else {
 					UIGeneratorInterface.UI.ulpObject.IconPantallaCompleta.setIcon("fullscreen_exit");
@@ -311,16 +319,36 @@ let UIGeneratorInterface = class {
 							.css("right", "10px");
 						UIGeneratorInterface.UI.ulsObject.p.setShow(0);
 						UIGeneratorInterface.UI.ulsObject.div.setShow(0);
+						UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(0);
 					}
 				}
 
 				UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta = !UIGeneratorInterface.UI.ulpProperty.ButtonPantallaCompleta;
 			});
-
+		$(this.ulpObject.ButtonPropiedades.$el).click(function(e) {
+			if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
+				//show property
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = true;
+				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el)
+					.css("width", "270px");
+				$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
+					.css("right", "278px");
+				UIGeneratorInterface.UI.ulpObject.IconButtonPropiedades.setIcon("arrow_forward");
+			} else {
+				//!show property
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = false;
+				$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el)
+					.css("width", "0px");
+				$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
+					.css("right", "10px");
+				UIGeneratorInterface.UI.ulpObject.IconButtonPropiedades.setIcon("assignment");
+			}
+		});
 		for (var x in this.ulsObject.component) {
 			var currentComponent = x;
 			$(this.ulsObject.component[currentComponent].$el)
 				.click(function(e) {
+					UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(1);
 					UIGeneratorInterface.UI.panelPropertyRightUpdate(e);
 					if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
 						UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow = true;
@@ -397,6 +425,7 @@ let UIGeneratorInterface = class {
 				.css("width", "0px");
 			UIGeneratorInterface.UI.ulsObject.p.setShow(0);
 			UIGeneratorInterface.UI.ulsObject.div.setShow(0);
+			UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(0);
 		}
 	}
 	panelColorInitialize(property, componentValue) {
@@ -420,18 +449,11 @@ let UIGeneratorInterface = class {
 			}
 			UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
 		}
-		componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
+		UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
 		return true;
 	}
-	resolveColor(e) {
-		console.log(e, UIGeneratorInterface.UI.panelColor);
-		// if (e.target.__vue__) {
-		// var colorSet = e.target.__vue__.color;
-		// UIGeneratorInterface.UI.componentValue.setColor(colorSet);
-		// }
-		UIGeneratorInterface.UI.panelColor.setShow(0);
-	}
 	resolvePanelColor(e) {
+		UIGeneratorInterface.UI.colorEvent = e;
 		if (UIGeneratorInterface.UI.panelColor) {
 			UIGeneratorInterface.UI.panelColor.$el.remove();
 			delete UIGeneratorInterface.UI.panelColor;
@@ -473,19 +495,27 @@ let UIGeneratorInterface = class {
 				var currentRangeColor = currentColor[j];
 				UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
 				UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]);
-				UIGeneratorInterface.UI.panelColor.$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
+				UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
 			}
 		}
 	}
+	resolveColor(e) {
+		UIGeneratorInterface.UI.colorSet = e.target.__vue__.color;
+		if (e.target.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent === "undefined") {
+			UIGeneratorInterface.UI.colorEvent.target.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
+		} else if (e.target.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent !== "undefined") {
+			UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent.setColor(UIGeneratorInterface.UI.colorSet);
+		}
+		UIGeneratorInterface.UI.panelColor.setShow(0);
+	}
 	panelPropertyRightUpdate(e) {
 		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
+
 		$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el)
 			.css("width", "0px");
 		$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
 			.css("right", "10px");
 		if (e.currentTarget.__vue__._isMounted && e.currentTarget.__vue__._isVue) {
-
-
 			setTimeout(function() {
 				UIGeneratorInterface.UI.ulsObject.div.clearVue();
 				var currentNameComponent = 'c-' + e.currentTarget.__vue__.$parent.text;
@@ -522,9 +552,15 @@ let UIGeneratorInterface = class {
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						if (type === 'Array' && /color/.exec(property) !== null) {
+						if ((type === 'Array' || type === 'String') && /color/.exec(property) !== null) {
+							var color;
+							if (UIGeneratorInterface.UI.colorSet) {
+								color = UIGeneratorInterface.UI.colorSet;
+							} else {
+								color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
+							}
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
-								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+								.setColorText(color);
 							// $(componentValue.$el) brush
 							// .css("margin-top", "0px");
 							// $(componentValue.$el)
@@ -538,10 +574,10 @@ let UIGeneratorInterface = class {
 						if (type === 'Boolean') {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
 						}
-						if (type === 'String') {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						}
+						// if (type === 'String') {
+						// 	var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
+						// 		.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+						// }
 
 						if (type === 'Object') {
 
