@@ -567,11 +567,14 @@ let UIGeneratorInterface = class {
 					var type = t;
 					var defaultValue = d;
 					if (disableProperty.indexOf(property) === -1) {
-						// console.log(property, type);
+						console.log(property, type);
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+
+
+						//define component container, in type and property
 						if ((type === 'Array' || type === 'String') && (/color/i.exec(property) !== null)) {
 							var color;
 							if (UIGeneratorInterface.UI.colorSet) {
@@ -591,39 +594,28 @@ let UIGeneratorInterface = class {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
 						} else if (type === 'String' && property === "wave") {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+						} else if (type === 'Boolean') {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+						} else if ((type === 'String' || type === 'Number') && property === "mode") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+						} else if (type === 'Object') {
+
+						} else if (type === 'Date') {
+
+						} else if (type === 'Function') {
+
+						} else if (type === 'Symbol') {
+
 						} else {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						}
-						// if (type === 'Number') {
-						// var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch");
-						// }
-						if (type === 'Boolean') {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						}
-						// if (type === 'String') {
-						// 	var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-						// 		.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						// }
-
-						if (type === 'Object') {
-
-						}
-						if (type === 'Date') {
-
-						}
-						if (type === 'Function') {
-
-						}
-						if (type === 'Symbol') {
-
+								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]).setValue(defaultValue);
 						}
 
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
 							.setIcon("extension")
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1])
 							.setFloat(UIGeneratorInterface.UI.appVue.float.l);
-
+						//define title panel
 						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2)
 								.toUpperCase() + currentNameComponent.slice(3))
 							.setColor(UIGeneratorInterface.UI.appVue.color.indigo[5])
@@ -631,6 +623,7 @@ let UIGeneratorInterface = class {
 						$(UIGeneratorInterface.UI.ulsObject.p.$el)
 							.css("margin-top", "0px")
 							.css("padding", "12px");
+						//mounted property
 						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
 						componentContainer.create(currentIcon);
 						componentContainer.create(componentProperty);
@@ -688,7 +681,29 @@ let UIGeneratorInterface = class {
 								var current = vectorOptions[xf];
 								componentValue.addOption([current, current]);
 							}
+						} else if (type === 'Boolean') {
+							componentValue.setValue(defaultValue);
+						} else if ((type === 'String' || type === 'Number') && property === "mode") {
+							var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
+							//set default values modes
+							if (/Preloader/i.exec(nameComponent) !== null) {
+								var vectorOptions = new Array();
+								vectorOptions.push("indeterminate");
+								vectorOptions.push("determinate");
+							} else if (/collection/i.exec(nameComponent) !== null) {
+								var vectorOptions = new Array();
+								vectorOptions.push("basic");
+								vectorOptions.push("link");
+								vectorOptions.push("headers");
+							}
+
+							componentValue.addOption(["", ""]);
+							for (var xf in vectorOptions) {
+								var current = vectorOptions[xf];
+								componentValue.addOption([current, current]);
+							}
 						}
+
 						$(currentIcon.$el)
 							.css("margin-left", "10px");
 						$(currentIcon.$el)

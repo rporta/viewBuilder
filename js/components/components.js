@@ -2809,6 +2809,16 @@ var inputFields = new configComponent({
 			}
 			return this;
 		},
+		setValue(arg) {
+			this.value = arg;
+			if (!this.$el) {
+				this.$mount();
+			}
+			$(this.$el.children[0].children[0]).prop({
+				value: this.value
+			});
+			return this;
+		},
 		generateType: function() {
 			var type = new Array("text", "email", "password");
 			return type[this.type];
@@ -2951,6 +2961,7 @@ var inputSwitch = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			value: this.pvalue,
 		}
 	},
 	props: {
@@ -3039,6 +3050,16 @@ var inputSwitch = new configComponent({
 			var container = "container";
 			return new Array(this.color, this.colorText, this.float, this.shadow, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", this.container ? container : "").join(" ");
 		},
+		setValue(arg) {
+			this.value = arg;
+			if (!this.$el) {
+				this.$mount();
+			}
+			$(this.$el.children[0].children[0]).prop({
+				checked: this.value
+			});
+			return this;
+		}
 	}
 });
 var inputCheckbox = new configComponent({
