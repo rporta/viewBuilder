@@ -81,10 +81,10 @@ let UIGeneratorInterface = class {
 		this.ulpObject.panelLeft.create(this.ulpObject.ButtonRegilla);
 		this.ulpObject.panelLeft.create(this.ulpObject.ButtonEscala);
 
+		this.ulpObject.panelRight.create(this.ulpObject.ButtonPropiedades);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAtras);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAdelante);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonGuardar);
-		this.ulpObject.panelRight.create(this.ulpObject.ButtonPropiedades);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonPantallaCompleta);
 
 		$(this.ulpObject.ButtonRegilla.$el)
@@ -408,12 +408,6 @@ let UIGeneratorInterface = class {
 					UIGeneratorInterface.UI.panelPropertyRightOut(e);
 				}
 			});
-		$(this.ulsObject.uiLayerSecondary.$el)
-			.click(function(e) {
-				if (e.currentTarget === e.target) {
-					UIGeneratorInterface.UI.panelPropertyRightOut(e);
-				}
-			});
 	}
 
 	panelPropertyRightOut() {
@@ -426,6 +420,9 @@ let UIGeneratorInterface = class {
 			UIGeneratorInterface.UI.ulsObject.p.setShow(0);
 			UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 			UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(0);
+			if (UIGeneratorInterface.UI.panelColor) {
+				UIGeneratorInterface.UI.panelColor.setShow(0);
+			}
 		}
 	}
 	panelColorInitialize(property, componentValue) {
