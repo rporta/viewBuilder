@@ -701,7 +701,7 @@ let UIGeneratorInterface = class {
 								var current = vectorOptions[xf];
 								componentValue.addOption([current, current]);
 							}
-						} else if (property === "progress" && type === "Number") {
+						} else if ((property === "s" || property === "m" || property === "l" || property === "xl" || property === "progress") && type === "Number") {
 							// console.log(property, type, defaultValue, componentValue);
 							componentValue.setValue(defaultValue);
 						}
