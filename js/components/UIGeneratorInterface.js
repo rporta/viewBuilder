@@ -198,7 +198,7 @@ let UIGeneratorInterface = class {
 			.css("top", "0px")
 			.css("right", "0px")
 			.css("height", "100%")
-			.css("overflow-y", "scroll")
+			.css("overflow-y", "auto")
 			// .css("overflow-x", "hidden")
 			.css("width", "0px")
 			.css("-webkit-transition", "all 0.30s ease")
