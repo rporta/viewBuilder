@@ -445,8 +445,10 @@ let UIGeneratorInterface = class {
 			}
 		}
 	}
-	panelColorInitialize(property, componentValue, componentName) {
+	panelColorInitialize(property, componentValue, componentName, defaultValue) {
 		UIGeneratorInterface.UI.componentValue = componentValue;
+
+		UIGeneratorInterface.UI.componentValue.setColor(defaultValue);
 		if (/color/i.exec(property) !== null) {
 			if (property === "color") {
 				if (UIGeneratorInterface.UI.color) {
@@ -589,6 +591,8 @@ let UIGeneratorInterface = class {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
 						} else if (type === 'Number' && property === "method") {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+						} else if (type === 'Number' && property === "type") {
+							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
 						} else if ((type === 'String' || type === 'Number') && property === "size") {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
 						} else if (type === 'String' && property === "wave") {
@@ -631,54 +635,104 @@ let UIGeneratorInterface = class {
 						//set Option c-input-select before mounted
 						if (type === 'String' && /textAling|float/.exec(property) !== null) {
 							componentValue.addOption(["", ""]);
+							var count = 0;
 							for (var xf in UIGeneratorInterface.UI.appVue.textAling) {
 								var current = UIGeneratorInterface.UI.appVue.textAling[xf];
-								// console.log(current);
+								// console.log(property, type, defaultValue, current, xf);
 								if (/left/.exec(current) !== null) var text = "left";
 								if (/center/.exec(current) !== null) var text = "center";
 								if (/right/.exec(current) !== null) var text = "right";
-								componentValue.addOption([text, current]);
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(current, "i");
+								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									componentValue.addOption([text, current, true]);
+								} else {
+									componentValue.addOption([text, current]);
+								}
+								count++;
 							}
 							currentIcon.setIcon("text_fields");
 						} else if (type === 'String' && property === "shadow") {
 							componentValue.addOption(["", ""]);
+							var count = 0;
 							for (var xf in UIGeneratorInterface.UI.appVue.shadow) {
 								var text = UIGeneratorInterface.UI.appVue.shadow[xf];
-								componentValue.addOption([xf, text]);
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(text, "i");
+								if (regExp.exec(text) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									componentValue.addOption([text, text, true]);
+								} else {
+									componentValue.addOption([text, text]);
+								}
+								count++;
 							}
 						} else if (type === 'Number' && property === "method") {
 							var options = ['GET', 'POST'];
-							for (var xf in options) {
-								var text = options[xf];
-								componentValue.addOption([text, text]);
+							var count = 0;
+							for (var ge in options) {
+								var text = options[ge];
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(text, "i");
+								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									componentValue.addOption([text, text, true]);
+								} else {
+									componentValue.addOption([text, text]);
+								}
+								count++;
+							}
+						} else if (type === 'Number' && property === "type") {
+							var options;
+							if (/input/i.exec(currentNameComponent) !== null) {
+								options = ['text', 'email', 'password'];
+							} else if (/button/i.exec(currentNameComponent) !== null) {
+								options = ['button', 'submit', 'reset'];
+							}
+							var count = 0;
+							for (var ge in options) {
+								var text = options[ge];
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(text, "i");
+								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									componentValue.addOption([text, text, true]);
+								} else {
+									componentValue.addOption([text, text]);
+								}
+								count++;
 							}
 						} else if (type === 'String' && property === "wave") {
 							componentValue.addOption(["", ""]);
 							for (var xf in UIGeneratorInterface.UI.appVue.waves) {
 								var mode = UIGeneratorInterface.UI.appVue.waves[xf];
 								for (var ge in mode) {
-									text = mode[ge];
+									var text = mode[ge];
 									componentValue.addOption([xf + '(' + ge + '): ' + text, text]);
 								}
 							}
 						} else if ((type === 'String' || type === 'Number') && property === "size") {
 							var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
-
 							if (/Icon/i.exec(nameComponent) !== null) {
 								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeIcon;
 							} else if (/Card/i.exec(nameComponent) !== null) {
 								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeCard;
 							} else if (/Preloader/i.exec(nameComponent) !== null) {
 								var vectorOptions = UIGeneratorInterface.UI.appVue.sizePreloader;
-							} else if (/Button/i.exec(nameComponent) !== null) {
+							} else if (/Button/i.exec(nameComponent) !== null || /dropdown/i.exec(nameComponent) !== null) {
 								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeButton;
 							} else if ("H" === nameComponent) {
 								var vectorOptions = [1, 2, 3, 4, 5, 6];
 							}
 							componentValue.addOption(["", ""]);
+							var count = 0;
 							for (var xf in vectorOptions) {
 								var current = vectorOptions[xf];
-								componentValue.addOption([current, current]);
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(current, "i");
+								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									componentValue.addOption([current, current, defaultValue]);
+								} else {
+									componentValue.addOption([current, current]);
+								}
+								count++;
 							}
 						} else if (type === 'Boolean') {
 							componentValue.setValue(defaultValue);
@@ -695,11 +749,21 @@ let UIGeneratorInterface = class {
 								vectorOptions.push("link");
 								vectorOptions.push("headers");
 							}
-
+							// console.log(property, type, defaultValue);
 							componentValue.addOption(["", ""]);
 							for (var xf in vectorOptions) {
 								var current = vectorOptions[xf];
-								componentValue.addOption([current, current]);
+								var regExp = new RegExp(defaultValue, "i");
+								var regExp2 = new RegExp(current, "i");
+								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+									if (xf === String(defaultValue)) {
+										componentValue.addOption([current, current, true]);
+									} else {
+										componentValue.addOption([current, current, defaultValue]);
+									}
+								} else {
+									componentValue.addOption([current, current]);
+								}
 							}
 						} else if ((property === "s" || property === "m" || property === "l" || property === "xl" || property === "progress") && type === "Number") {
 							// console.log(property, type, defaultValue, componentValue);
@@ -728,6 +792,7 @@ let UIGeneratorInterface = class {
 						$(componentValue.$el)
 							.removeClass("input-field");
 
+						// console.log(changeColor, ff);
 						if (changeColor) {
 							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[7]);
 						} else {
@@ -738,15 +803,49 @@ let UIGeneratorInterface = class {
 						if ("show" === property) currentIcon.setIcon("visibility");
 						if ("shadow" === property) currentIcon.setIcon("filter_none");
 						if (/color/i.exec(property) !== null) {
-							currentIcon.setIcon("format_paint");
-							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3));
+							if (/text/i.exec(property) !== null) {
+								currentIcon.setIcon("format_color_text");
+							} else {
+
+								currentIcon.setIcon("format_color_fill");
+							}
+							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
 						}
 						if ("mode" === property) currentIcon.setIcon("swap_horiz");
 						if ("progress" === property) currentIcon.setIcon("trending_flat");
 						if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
-						if (/text/.exec(property) !== null) currentIcon.setIcon("text_fields");
+						if (/style/.exec(property) !== null) currentIcon.setIcon("style");
+						if (/text/.exec(property) !== null) {
+							if ("text" === property) {
+								currentIcon.setIcon("edit");
+							} else {
+								currentIcon.setIcon("format_align_left");
+							}
+
+						}
+						if (/file|action/.exec(property) !== null) currentIcon.setIcon("insert_drive_file");
 						if ("valign" === property) currentIcon.setIcon("vertical_align_center");
+						if ("flowText" === property) currentIcon.setIcon("format_size");
+						if ("hoverable" === property) currentIcon.setIcon("compare");
 						if ("new" === property) currentIcon.setIcon("fiber_new");
+						if (/src|href/.exec(property) !== null) currentIcon.setIcon("insert_link");
+						if ("circle" === property) currentIcon.setIcon("account_circle");
+						if ("name" === property) currentIcon.setIcon("font_download");
+						if ("materialbox" === property) currentIcon.setIcon("crop_free");
+						if ("responsive" === property) currentIcon.setIcon("view_quilt");
+						if (/float/i.exec(property) !== null) {
+							currentIcon.setIcon("dashboard");
+							$(currentIcon.$el).css("transform", "rotate(90deg)");
+						}
+						if ("disable" === property) currentIcon.setIcon("lock_outline");
+						if ("container" === property) currentIcon.setIcon("view_array");
+						if ("cardpanel" === property) currentIcon.setIcon("aspect_ratio");
+						if ("wave" === property) currentIcon.setIcon("fingerprint");
+						if ("type" === property) currentIcon.setIcon("title");
+						if ("truncate" === property) {
+							currentIcon.setIcon("keyboard_tab");
+							$(currentIcon.$el).css("transform", "rotate(180deg)");
+						}
 
 						setTimeout(function() {
 							UIGeneratorInterface.UI.ulsObject.div.setShow(1);
@@ -755,8 +854,8 @@ let UIGeneratorInterface = class {
 							$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
 								.css("right", "278px");
 						}, 500);
+						ff++;
 					}
-					ff++;
 				}
 			}, 500);
 

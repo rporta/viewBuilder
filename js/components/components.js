@@ -1374,7 +1374,7 @@ var h = new configComponent({
 			required: false,
 			default: true,
 		},
-		fplowText: {
+		pflowText: {
 			type: Boolean,
 			required: false,
 			default: false,
@@ -2649,7 +2649,8 @@ var inputSelect = new configComponent({
 				var currentOptionValue = this.option[x];
 				var option = $('<option>', {
 					text: currentOptionValue[0],
-					value: currentOptionValue[1]
+					value: currentOptionValue[1],
+					selected: currentOptionValue[2] || false
 				})
 				$(select).append(option);
 			}
