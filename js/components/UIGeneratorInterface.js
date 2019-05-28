@@ -509,24 +509,34 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.ulsObject.colors = new Object();
 		UIGeneratorInterface.UI.panelColor.setShow(1);
 		UIGeneratorInterface.UI.panelColorTitle.setShow(1);
-
-		UIGeneratorInterface.UI.ulsObject.componentColor = new Object();
+		if (!UIGeneratorInterface.UI.ulsObject.componentColor) {
+			UIGeneratorInterface.UI.ulsObject.componentColor = new Object();
+		}
 		for (var x in UIGeneratorInterface.UI.color) {
 			var currentColor = UIGeneratorInterface.UI.color[x];
 			for (var j in currentColor) {
-				var currentRangeColor = currentColor[j];
-				UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
-				UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]);
-				UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
+				((j, currentColor) => {
+					setTimeout(function() {
+						var currentRangeColor = currentColor[j];
+						if (UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]) {
+							UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].$el.remove();
+							delete UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor];
+						}
+						UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
+						UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]);
+						UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
+					}, 150);
+				})(j, currentColor)
 			}
 		}
 	}
 	resolveColor(e) {
-		UIGeneratorInterface.UI.colorSet = e.target.__vue__.color;
-		if (e.target.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent === "undefined") {
-			UIGeneratorInterface.UI.colorEvent.target.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
-		} else if (e.target.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent !== "undefined") {
-			UIGeneratorInterface.UI.colorEvent.target.__vue__.$parent.setColor(UIGeneratorInterface.UI.colorSet);
+		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;
+		console.log(UIGeneratorInterface.UI.colorSet, e);
+		if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent === "undefined") {
+			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
+		} else if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent !== "undefined") {
+			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.setColor(UIGeneratorInterface.UI.colorSet);
 		}
 		UIGeneratorInterface.UI.panelColor.setShow(0);
 	}
@@ -578,11 +588,8 @@ let UIGeneratorInterface = class {
 						//define component container, in type and property
 						if ((type === 'Array' || type === 'String') && (/color/i.exec(property) !== null)) {
 							var color;
-							if (UIGeneratorInterface.UI.colorSet) {
-								color = UIGeneratorInterface.UI.colorSet;
-							} else {
-								color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
-							}
+							color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
+
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
 								.setColorText(color);
 						} else if (type === 'String' && /textAling|float/.exec(property) !== null) {

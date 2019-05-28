@@ -291,7 +291,7 @@ var preloaderCircle = new configComponent({
 		setStyle: function() {
 			var out;
 			out = {
-				borderColor: this.colorsHexa
+				borderColor: this.colorHexa
 			}
 			return out;
 		},
@@ -4226,7 +4226,7 @@ var preloaderCircleFull = new configComponent({
 	name: "c-preloader-circle-full",
 	data: function() {
 		return {
-			colorsHexa: this.pcolorsHexa,
+			colorHexa: this.pcolorHexa,
 			size: this.psize,
 			show: this.pshow,
 			sectionColor: this.psectionColor,
@@ -4243,7 +4243,7 @@ var preloaderCircleFull = new configComponent({
 			required: false,
 			default: true,
 		},
-		pcolorsHexa: {
+		pcolorHexa: {
 			type: String,
 			required: false,
 			default: "red",
@@ -4257,7 +4257,7 @@ var preloaderCircleFull = new configComponent({
 	},
 	methods: {
 		setColorHexa: function(arg) {
-			this.colorsHexa = arg;
+			this.colorHexa = arg;
 			if (this.$el) {
 				container = this.getChild(this);
 				preloaderCircle = this.getChild(container).setColorHexa(arg);
@@ -4300,7 +4300,7 @@ var preloaderCircleFull = new configComponent({
 	render: function(createElement) {
 		var csection = new this.$options.components['c-section']().$mount().setStyleP(true).setColor(this.sectionColor);
 		var ccontainer = new this.$options.components['c-container']().$mount().setStyleP(true).setContainer(false);
-		var preloaderCircle = new this.$options.components['c-preloader-circle']().$mount().setColorHexa(this.colorsHexa).setSize(this.size);
+		var preloaderCircle = new this.$options.components['c-preloader-circle']().$mount().setColorHexa(this.colorHexa).setSize(this.size);
 		csection.create(ccontainer);
 		ccontainer.create(preloaderCircle);
 		var section = createElement('c-section');
