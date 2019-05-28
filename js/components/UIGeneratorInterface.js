@@ -254,13 +254,13 @@ let UIGeneratorInterface = class {
 			this.ulsObject.component[currentComponent].create(currentIcon);
 
 			if (changeColor) {
-				this.ulsObject.component[currentComponent].setColor(" " + this.appVue.color.teal[5]);
+				this.ulsObject.component[currentComponent].setColor(this.appVue.color.cyan[7]);
 				$(this.ulsObject.component[currentComponent].$el)
-					.css("border-left-color", this.appVue.colorHexa.teal[3]);
+					.css("border-left-color", this.appVue.colorHexa.cyan[11]);
 			} else {
-				this.ulsObject.component[currentComponent].setColor(this.appVue.color.teal[8]);
+				this.ulsObject.component[currentComponent].setColor(this.appVue.color.teal[7]);
 				$(this.ulsObject.component[currentComponent].$el)
-					.css("border-left-color", this.appVue.colorHexa.teal[4]);
+					.css("border-left-color", this.appVue.colorHexa.cyan[11]);
 			}
 			this.ulsObject.component[currentComponent].setText(currentComponent);
 		}
@@ -799,7 +799,6 @@ let UIGeneratorInterface = class {
 						$(componentValue.$el)
 							.removeClass("input-field");
 
-						// console.log(changeColor, ff);
 						if (changeColor) {
 							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[7]);
 						} else {
