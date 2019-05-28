@@ -150,6 +150,8 @@ let UIGeneratorInterface = class {
 		this.ulsProperty = new Object();
 		this.ulsProperty.panelComponentLeftShort = true;
 		this.ulsProperty.panelPropertyRightShow = false;
+		this.ulsProperty.panelPropertyRightMove = false;
+		this.ulsProperty.panelPropertyClick = false;
 
 		//uiLayerSecondary
 		this.ulsObject.uiLayerSecondary = this.appVue.newComponent("c-div")
@@ -269,6 +271,7 @@ let UIGeneratorInterface = class {
 	previsualizationLayer() {
 		this.history = new Object();
 		this.save = new Object();
+		this.save.componentList = new Object();
 		this.plObject = new Object();
 		this.plObject.previsualizationLayer = this.appVue.newComponent("c-div")
 			.setColor("green");
@@ -350,6 +353,7 @@ let UIGeneratorInterface = class {
 			var currentComponent = x;
 			$(this.ulsObject.component[currentComponent].$el)
 				.click(function(e) {
+					UIGeneratorInterface.UI.save.tempComponentName = "c-" + e.currentTarget.__vue__.$parent.text;
 					UIGeneratorInterface.UI.ulpObject.ButtonPropiedades.setShow(1);
 					UIGeneratorInterface.UI.panelPropertyRightUpdate(e);
 					if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightShow) {
@@ -419,15 +423,53 @@ let UIGeneratorInterface = class {
 
 				}
 			});
+		$(this.ulsObject.panelPropertyRight.$el).mousemove(function(e) {
+			if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove) {
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove = true;
+			}
+		}).mouseout(function(e) {
+			if (UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove) {
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove = false;
+			}
+			if (UIGeneratorInterface.UI.ulsProperty.panelPropertyClick) {
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyClick = false;
+			}
+		}).click(function(e) {
+			if (!UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove) {
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyClick = true;
+			}
+		});
 	}
 	previsualizationLayerEvents() {
 		// events, se trabaja con la variable de instancia para acceder a los componentes 
-		$(this.ulsObject.uiLayerSecondary.$el)
-			.click(function(e) {
-				if (e.currentTarget === e.target) {
-					UIGeneratorInterface.UI.panelPropertyRightOut(e);
+		$(this.ulsObject.uiLayerSecondary.$el).click(function(e) {
+			if (e.currentTarget === e.target) {
+				UIGeneratorInterface.UI.panelPropertyRightOut(e);
+			}
+			if (typeof UIGeneratorInterface.UI.save.tempInstance !== "undefined" && UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove === false) {
+				var id = UIGeneratorInterface.UI.appVue.generateAphaId(5);
+				UIGeneratorInterface.UI.save.componentList[id] = UIGeneratorInterface.UI.save.tempInstance;
+				delete UIGeneratorInterface.UI.save.tempInstance;
+			}
+
+
+		});
+		$(this.ulsObject.uiLayerSecondary.$el).mousemove(function(e) {
+			if (UIGeneratorInterface.UI.save.tempComponentName) {
+				UIGeneratorInterface.UI.save.tempInstance = UIGeneratorInterface.UI.appVue.newComponent(UIGeneratorInterface.UI.save.tempComponentName);
+				UIGeneratorInterface.UI.plObject.previsualizationLayer.create(UIGeneratorInterface.UI.save.tempInstance);
+				$(UIGeneratorInterface.UI.save.tempInstance.$el).css("position", "absolute");
+				delete UIGeneratorInterface.UI.save.tempComponentName;
+			}
+			if (typeof UIGeneratorInterface.UI.save.tempInstance !== "undefined" &&
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyRightMove === false &&
+				UIGeneratorInterface.UI.ulsProperty.panelPropertyClick === false) {
+				if (UIGeneratorInterface.UI.save.tempInstance.$el) {
+					$(UIGeneratorInterface.UI.save.tempInstance.$el).css("top", e.originalEvent.y);
+					$(UIGeneratorInterface.UI.save.tempInstance.$el).css("left", e.originalEvent.x);
 				}
-			});
+			}
+		});
 	}
 
 	panelPropertyRightOut() {
