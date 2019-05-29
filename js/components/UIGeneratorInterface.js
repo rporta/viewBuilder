@@ -574,13 +574,62 @@ let UIGeneratorInterface = class {
 	}
 	resolveColor(e) {
 		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;
-		console.log(UIGeneratorInterface.UI.colorSet, e);
+		// console.log(UIGeneratorInterface.UI.colorSet, e);
 		if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent === "undefined") {
 			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
+			for (var i in UIGeneratorInterface.UI.save.componentProperty) {
+				if (UIGeneratorInterface.UI.save.componentProperty[i].name === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property) {
+					UIGeneratorInterface.UI.save.componentProperty[i].value = UIGeneratorInterface.UI.colorSet;
+					//update property
+					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
+						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property) {
+							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+						}
+					}
+				}
+			}
 		} else if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent !== "undefined") {
 			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.setColor(UIGeneratorInterface.UI.colorSet);
+			for (var i in UIGeneratorInterface.UI.save.componentProperty) {
+				if (UIGeneratorInterface.UI.save.componentProperty[i].name === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property) {
+					UIGeneratorInterface.UI.save.componentProperty[i].value = UIGeneratorInterface.UI.colorSet;
+					//update property
+					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
+						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property) {
+							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+						}
+					}
+				}
+			}
 		}
 		UIGeneratorInterface.UI.panelColor.setShow(0);
+	}
+	resolveComponentValueEvent(componentValue) {
+		$(componentValue.$el).change(function(e) {
+			var tag = e.tagName;
+			if (/select/i.exec(tag) !== -1) {
+				var val = $(e.target).val();
+			} else if (/input/i.exec(tag) !== -1) {
+				var type = $(e.target).attr('type');
+				if (/checkbox/i.exec(tag) !== -1) {
+					var val = e.target.checked;
+				} else {
+					var val = $(e.target).val();
+				}
+
+			}
+			for (var i in UIGeneratorInterface.UI.save.componentProperty) {
+				if (UIGeneratorInterface.UI.save.componentProperty[i].name === componentValue.property) {
+					UIGeneratorInterface.UI.save.componentProperty[i].value = val;
+					//update property
+					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
+						if (n === componentValue.property) {
+							UIGeneratorInterface.UI.save.tempInstance[n] = val;
+						}
+					}
+				}
+			}
+		});
 	}
 	panelPropertyRightUpdate(e) {
 		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
@@ -606,6 +655,7 @@ let UIGeneratorInterface = class {
 				disableProperty.push('idA');
 				disableProperty.push('dropdown');
 				var ff = 0;
+				UIGeneratorInterface.UI.save.componentProperty = new Array();
 				for (var x in allProperty) {
 					var changeColor = (ff % 2 === 0);
 					var p = x.substr(1);
@@ -621,6 +671,11 @@ let UIGeneratorInterface = class {
 					var defaultValue = d;
 					if (disableProperty.indexOf(property) === -1) {
 						// console.log(property, type);
+						UIGeneratorInterface.UI.save.tempProperty = new Object();
+						UIGeneratorInterface.UI.save.tempProperty.name = property;
+						UIGeneratorInterface.UI.save.tempProperty.value = defaultValue;
+						UIGeneratorInterface.UI.save.componentProperty.push(UIGeneratorInterface.UI.save.tempProperty);
+
 						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
 							.setText(property)
@@ -662,7 +717,7 @@ let UIGeneratorInterface = class {
 							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
 								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
 						}
-
+						componentValue.property = property;
 						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
 							.setIcon("extension")
 							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1])
@@ -858,7 +913,11 @@ let UIGeneratorInterface = class {
 								currentIcon.setIcon("format_color_fill");
 							}
 							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
+						} else {
+							//define event
+							UIGeneratorInterface.UI.resolveComponentValueEvent(componentValue);
 						}
+
 						if ("mode" === property) currentIcon.setIcon("swap_horiz");
 						if ("progress" === property) currentIcon.setIcon("trending_flat");
 						if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
