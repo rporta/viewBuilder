@@ -36,8 +36,7 @@ let UIGeneratorInterface = class {
 		this.ulpProperty.ButtonEscala = false;
 
 		this.ulpObject = new Object();
-		this.ulpObject.uiLayerPrimary = this.appVue.newComponent("c-div")
-			.setColor("red");
+		this.ulpObject.uiLayerPrimary = this.appVue.newComponent("c-div");
 		this.ulpObject.panelLeft = this.appVue.newComponent("c-div");
 		this.ulpObject.panelRight = this.appVue.newComponent("c-div");
 
@@ -154,8 +153,7 @@ let UIGeneratorInterface = class {
 		this.ulsProperty.panelPropertyClick = false;
 
 		//uiLayerSecondary
-		this.ulsObject.uiLayerSecondary = this.appVue.newComponent("c-div")
-			.setColor("blue");
+		this.ulsObject.uiLayerSecondary = this.appVue.newComponent("c-div");
 		this.appVue.create(this.ulsObject.uiLayerSecondary);
 
 		$(this.ulsObject.uiLayerSecondary.$el)
@@ -606,12 +604,12 @@ let UIGeneratorInterface = class {
 	}
 	resolveComponentValueEvent(componentValue) {
 		$(componentValue.$el).change(function(e) {
-			var tag = e.tagName;
-			if (/select/i.exec(tag) !== -1) {
+			var tag = e.target.tagName;
+			if (/select/i.exec(tag) !== null) {
 				var val = $(e.target).val();
-			} else if (/input/i.exec(tag) !== -1) {
+			} else if (/input/i.exec(tag) !== null) {
 				var type = $(e.target).attr('type');
-				if (/checkbox/i.exec(tag) !== -1) {
+				if (/checkbox/i.exec(type) !== null) {
 					var val = e.target.checked;
 				} else {
 					var val = $(e.target).val();
