@@ -507,6 +507,7 @@ let UIGeneratorInterface = class {
 					delete UIGeneratorInterface.UI.color;
 				}
 				UIGeneratorInterface.UI.color = UIGeneratorInterface.UI.appVue.color;
+				UIGeneratorInterface.UI.colorType = property;
 			}
 			UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelColor, false);
 			return true;
@@ -555,7 +556,7 @@ let UIGeneratorInterface = class {
 		for (var x in UIGeneratorInterface.UI.color) {
 			var currentColor = UIGeneratorInterface.UI.color[x];
 			for (var j in currentColor) {
-				((j, currentColor) => {
+				((x, j, currentColor) => {
 					setTimeout(function() {
 						var currentRangeColor = currentColor[j];
 						if (UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]) {
@@ -563,15 +564,24 @@ let UIGeneratorInterface = class {
 							delete UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor];
 						}
 						UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor] = UIGeneratorInterface.UI.appVue.newComponent("c-button").setColor(currentRangeColor);
+
+						var defineColor = {
+							color: x,
+							index: j
+						};
+
 						UIGeneratorInterface.UI.panelColor.create(UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor]);
+						UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].defineColor = defineColor;
 						UIGeneratorInterface.UI.ulsObject.componentColor[currentRangeColor].$el.addEventListener('click', UIGeneratorInterface.UI.resolveColor, false);
 					}, 150);
-				})(j, currentColor)
+				})(x, j, currentColor)
 			}
 		}
 	}
 	resolveColor(e) {
 		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;
+		var defineColor = e.explicitOriginalTarget.__vue__.defineColor;
+
 		// console.log(UIGeneratorInterface.UI.colorSet, e);
 		if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent === "undefined") {
 			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
@@ -581,6 +591,8 @@ let UIGeneratorInterface = class {
 					//update property
 					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
 						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property) {
+							var colorType = n;
+							UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
 							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
 						}
 					}
@@ -594,6 +606,8 @@ let UIGeneratorInterface = class {
 					//update property
 					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
 						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property) {
+							var colorType = n;
+							UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
 							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
 						}
 					}
