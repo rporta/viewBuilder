@@ -483,6 +483,9 @@ let UIGeneratorInterface = class {
 			if (UIGeneratorInterface.UI.panelColor) {
 				UIGeneratorInterface.UI.panelColor.setShow(0);
 			}
+			if (UIGeneratorInterface.UI.panelIcon) {
+				UIGeneratorInterface.UI.panelIcon.setShow(0);
+			}
 		}
 	}
 	panelIconInitialize(property, componentValue, componentName, defaultValue) {
@@ -592,7 +595,7 @@ let UIGeneratorInterface = class {
 
 					UIGeneratorInterface.UI.panelcontainerIcon.create(UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i]);
 					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].create(UIGeneratorInterface.UI.ulsObject.componentIcon[i]);
-
+					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].defineIcon = currentIcon;
 					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.addEventListener('click', UIGeneratorInterface.UI.resolveIcon, false);
 				}, 150);
 			})(i, currentIcon)
@@ -663,7 +666,16 @@ let UIGeneratorInterface = class {
 		}
 	}
 	resolveIcon(e) {
-
+		var setIcon;
+		if (e.explicitOriginalTarget.tagName === "BUTTON") {
+			setIcon = e.explicitOriginalTarget.__vue__.defineIcon;
+		} else {
+			setIcon = e.explicitOriginalTarget.__vue__.icon;
+		}
+		UIGeneratorInterface.UI.componentValue.componentIcon.setIcon(setIcon);
+		//set temporalComponentSave
+		UIGeneratorInterface.UI.save.tempInstance.setIcon(setIcon);
+		UIGeneratorInterface.UI.panelIcon.setShow(0);
 	}
 	resolveColor(e) {
 		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;

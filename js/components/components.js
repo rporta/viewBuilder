@@ -1896,7 +1896,7 @@ var icon = new configComponent({
 		picon: {
 			type: String,
 			required: false,
-			default: null,
+			default: "archive",
 		},
 	},
 	template: '<transition name="fade">\
