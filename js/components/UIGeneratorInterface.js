@@ -485,6 +485,22 @@ let UIGeneratorInterface = class {
 			}
 		}
 	}
+	panelIconInitialize(property, componentValue, componentName, defaultValue) {
+		UIGeneratorInterface.UI.componentValue = componentValue;
+
+
+		var componentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
+			.setIcon(defaultValue);
+		UIGeneratorInterface.UI.componentValue.create(componentIcon);
+		UIGeneratorInterface.UI.componentValue.componentIcon = componentIcon;
+
+		if (UIGeneratorInterface.UI.icon) {
+			delete UIGeneratorInterface.UI.icon;
+		}
+		UIGeneratorInterface.UI.iconProperty = UIGeneratorInterface.UI.appVue.iconProperty;
+
+		UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelIcon, false);
+	}
 	panelColorInitialize(property, componentValue, componentName, defaultValue) {
 		UIGeneratorInterface.UI.componentValue = componentValue;
 
@@ -514,6 +530,75 @@ let UIGeneratorInterface = class {
 		} else {
 			return false;
 		}
+	}
+	resolvePanelIcon(e) {
+		UIGeneratorInterface.UI.iconEvent = e;
+		if (UIGeneratorInterface.UI.panelIcon) {
+			UIGeneratorInterface.UI.panelIcon.$el.remove();
+			delete UIGeneratorInterface.UI.panelIcon;
+		}
+		UIGeneratorInterface.UI.panelIcon = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.bwt[2])
+			// .setCardpanel(1)
+			.setShow(0);
+		UIGeneratorInterface.UI.panelcontainerIcon = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.bwt[2])
+			// .setCardpanel(1)
+			.setShow(0);
+		UIGeneratorInterface.UI.panelIconTitle = UIGeneratorInterface.UI.appVue.newComponent("c-p").setColor(UIGeneratorInterface.UI.appVue.color.blue[7])
+			.setShow(0)
+			.setText("Panel de iconos")
+			.setTextAling(UIGeneratorInterface.UI.appVue.textAling.c)
+			.setCardpanel(1)
+			.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+
+		UIGeneratorInterface.UI.appVue.create(UIGeneratorInterface.UI.panelIcon);
+		UIGeneratorInterface.UI.panelIcon.create(UIGeneratorInterface.UI.panelIconTitle);
+		UIGeneratorInterface.UI.panelIcon.create(UIGeneratorInterface.UI.panelcontainerIcon);
+		// UIGeneratorInterface.UI.panelIcon.$el.id = UIGeneratorInterface.UI.panelIcon.$el.id + '-panel-color';
+		// $(UIGeneratorInterface.UI.panelIcon.$el).attr("id", UIGeneratorInterface.UI.panelIcon.$el.id + '-panel-color');
+		$(UIGeneratorInterface.UI.panelIcon.$el)
+			.css("z-index", "1")
+			.css("width", "768px")
+			.css("position", "absolute")
+			.css("top", "50%")
+			.css("left", "50%")
+			.css("transform", "translate(-50%, -50%)");
+		$(UIGeneratorInterface.UI.panelIconTitle.$el)
+			.css("margin-top", "0px")
+			.css("margin-bottom", "0px")
+			.css("padding", "12px");
+		$(UIGeneratorInterface.UI.panelcontainerIcon.$el)
+			.css("overflow-y", "auto")
+			.css("height", "485.8px");
+		UIGeneratorInterface.UI.panelIcon.setShow(1);
+		UIGeneratorInterface.UI.panelIconTitle.setShow(1);
+		UIGeneratorInterface.UI.panelcontainerIcon.setShow(1);
+		if (!UIGeneratorInterface.UI.ulsObject.componentIcon) {
+			UIGeneratorInterface.UI.ulsObject.componentIcon = new Array();
+			UIGeneratorInterface.UI.ulsObject.componentButtonIcon = new Array();
+		}
+		for (var i in UIGeneratorInterface.UI.iconProperty.icon) {
+			var currentIcon = UIGeneratorInterface.UI.iconProperty.icon[i];
+			((i, currentIcon) => {
+				setTimeout(function() {
+					if (UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] && UIGeneratorInterface.UI.ulsObject.componentIcon[i]) {
+						UIGeneratorInterface.UI.ulsObject.componentIcon[i].$el.remove();
+						delete UIGeneratorInterface.UI.ulsObject.componentIcon[i];
+						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.remove();
+						delete UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i];
+					}
+					UIGeneratorInterface.UI.ulsObject.componentIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon(currentIcon);
+					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-button");
+
+
+					UIGeneratorInterface.UI.panelcontainerIcon.create(UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i]);
+					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].create(UIGeneratorInterface.UI.ulsObject.componentIcon[i]);
+
+					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.addEventListener('click', UIGeneratorInterface.UI.resolveIcon, false);
+				}, 150);
+			})(i, currentIcon)
+		}
+
+
 	}
 	resolvePanelColor(e) {
 		UIGeneratorInterface.UI.colorEvent = e;
@@ -547,7 +632,6 @@ let UIGeneratorInterface = class {
 			.css("margin-top", "0px")
 			.css("margin-bottom", "0px")
 			.css("padding", "12px");
-		UIGeneratorInterface.UI.ulsObject.colors = new Object();
 		UIGeneratorInterface.UI.panelColor.setShow(1);
 		UIGeneratorInterface.UI.panelColorTitle.setShow(1);
 		if (!UIGeneratorInterface.UI.ulsObject.componentColor) {
@@ -577,6 +661,9 @@ let UIGeneratorInterface = class {
 				})(x, j, currentColor)
 			}
 		}
+	}
+	resolveIcon(e) {
+
 	}
 	resolveColor(e) {
 		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;
@@ -695,7 +782,7 @@ let UIGeneratorInterface = class {
 
 
 						//define component container, in type and property
-						if ((type === 'Array' || type === 'String') && (/color/i.exec(property) !== null)) {
+						if ((type === 'Array' || type === 'String') && (/color|icon/i.exec(property) !== null)) {
 							var color;
 							color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
 
@@ -921,12 +1008,14 @@ let UIGeneratorInterface = class {
 							if (/text/i.exec(property) !== null) {
 								currentIcon.setIcon("format_color_text");
 							} else {
-
 								currentIcon.setIcon("format_color_fill");
 							}
 							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
 						} else {
 							//define event
+							if (/icon/i.exec(property) !== null) {
+								UIGeneratorInterface.UI.panelIconInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
+							}
 							UIGeneratorInterface.UI.resolveComponentValueEvent(componentValue);
 						}
 

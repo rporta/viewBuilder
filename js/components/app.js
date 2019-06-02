@@ -14,7 +14,8 @@ var app = new Vue({
 		'sizeIcon': sizeIcon,
 		'sizeCard': sizeCard,
 		'sizePreloader': sizePreloader,
-		'waves': waves
+		'waves': waves,
+		'iconProperty': iconProperty
 	},
 	components: {
 		/*components-preloader*/
