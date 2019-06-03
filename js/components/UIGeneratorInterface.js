@@ -505,8 +505,8 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.componentValue.$el.addEventListener('click', UIGeneratorInterface.UI.resolvePanelIcon, false);
 	}
 	panelColorInitialize(property, componentValue, componentName, defaultValue) {
+		property = property.split("-")[0];
 		UIGeneratorInterface.UI.componentValue = componentValue;
-
 		UIGeneratorInterface.UI.componentValue.setColor(defaultValue);
 		if (/color/i.exec(property) !== null) {
 			if (property === "color") {
@@ -604,6 +604,7 @@ let UIGeneratorInterface = class {
 
 	}
 	resolvePanelColor(e) {
+
 		UIGeneratorInterface.UI.colorEvent = e;
 		if (UIGeneratorInterface.UI.panelColor) {
 			UIGeneratorInterface.UI.panelColor.$el.remove();
@@ -678,10 +679,10 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.panelIcon.setShow(0);
 	}
 	resolveColor(e) {
+
 		UIGeneratorInterface.UI.colorSet = e.explicitOriginalTarget.__vue__.color;
 		var defineColor = e.explicitOriginalTarget.__vue__.defineColor;
-
-		// console.log(UIGeneratorInterface.UI.colorSet, e);
+		// console.log(defineColor);
 		if (e.explicitOriginalTarget.__vue__ && typeof UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent === "undefined") {
 			UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.setColor(UIGeneratorInterface.UI.colorSet);
 			for (var i in UIGeneratorInterface.UI.save.componentProperty) {
@@ -689,10 +690,22 @@ let UIGeneratorInterface = class {
 					UIGeneratorInterface.UI.save.componentProperty[i].value = UIGeneratorInterface.UI.colorSet;
 					//update property
 					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
-						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property) {
-							var colorType = n;
-							UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
-							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+						if (UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property.indexOf("-") !== -1) {
+							//colorArray
+							var currentProperty = UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property.split("-")[0];
+							var colorIndex = parseInt(UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property.split("-")[1]);
+							if (n === currentProperty) {
+								var colorType = n;
+								UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
+								UIGeneratorInterface.UI.save.tempInstance[n][colorIndex] = UIGeneratorInterface.UI.colorSet;
+								UIGeneratorInterface.UI.save.tempInstance.$mount();
+							}
+						} else {
+							if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.property) {
+								var colorType = n;
+								UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
+								UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+							}
 						}
 					}
 				}
@@ -704,10 +717,22 @@ let UIGeneratorInterface = class {
 					UIGeneratorInterface.UI.save.componentProperty[i].value = UIGeneratorInterface.UI.colorSet;
 					//update property
 					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
-						if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property) {
-							var colorType = n;
-							UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
-							UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+						if (UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property.indexOf("-") !== -1) {
+							//colorArray
+							var currentProperty = UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property.split("-")[0];
+							var colorIndex = parseInt(UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property.split("-")[1]);
+							if (n === currentProperty) {
+								var colorType = n;
+								UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
+								UIGeneratorInterface.UI.save.tempInstance[n][colorIndex] = UIGeneratorInterface.UI.colorSet;
+								UIGeneratorInterface.UI.save.tempInstance.$mount();
+							}
+						} else {
+							if (n === UIGeneratorInterface.UI.colorEvent.explicitOriginalTarget.__vue__.$parent.property) {
+								var colorType = n;
+								UIGeneratorInterface.UI.colorSet = UIGeneratorInterface.UI.appVue[colorType][defineColor.color][defineColor.index];
+								UIGeneratorInterface.UI.save.tempInstance[n] = UIGeneratorInterface.UI.colorSet;
+							}
 						}
 					}
 				}
@@ -742,6 +767,302 @@ let UIGeneratorInterface = class {
 			}
 		});
 	}
+	setProperty(property, type, defaultValue, currentNameComponent, changeColor) {
+
+		// console.log(property, type);
+		UIGeneratorInterface.UI.save.tempProperty = new Object();
+		UIGeneratorInterface.UI.save.tempProperty.name = property;
+		UIGeneratorInterface.UI.save.tempProperty.value = defaultValue;
+		UIGeneratorInterface.UI.save.componentProperty.push(UIGeneratorInterface.UI.save.tempProperty);
+
+		var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
+		var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
+			.setText(property)
+			.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+
+
+		//define component container, in type and property
+		if ((type === 'Array' || type === 'String') && (/color|icon/i.exec(property) !== null)) {
+			var color;
+			color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
+
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
+				.setColorText(color);
+		} else if (type === 'String' && /textAling|float/.exec(property) !== null) {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+		} else if (type === 'String' && property === "shadow") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+		} else if (type === 'Number' && property === "method") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+		} else if (type === 'Number' && property === "type") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+		} else if ((type === 'String' || type === 'Number') && property === "size") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+		} else if (type === 'String' && property === "wave") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
+		} else if (type === 'Boolean') {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+		} else if ((type === 'String' || type === 'Number') && property === "mode") {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+		} else if (type === 'Object') {
+
+		} else if (type === 'Date') {
+
+		} else if (type === 'Function') {
+
+		} else if (type === 'Symbol') {
+
+		} else {
+			var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
+				.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+		}
+		componentValue.property = property;
+		var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
+			.setIcon("extension")
+			.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1])
+			.setFloat(UIGeneratorInterface.UI.appVue.float.l);
+		//define title panel
+		UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2)
+				.toUpperCase() + currentNameComponent.slice(3))
+			.setColor(UIGeneratorInterface.UI.appVue.color.indigo[5])
+			.setCardpanel(1);
+		$(UIGeneratorInterface.UI.ulsObject.p.$el)
+			.css("margin-top", "0px")
+			.css("padding", "12px");
+		//mounted property
+		UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
+		componentContainer.create(currentIcon);
+		componentContainer.create(componentProperty);
+		componentContainer.create(componentValue);
+
+		//set Option c-input-select before mounted
+		if (type === 'String' && /textAling|float/.exec(property) !== null) {
+			componentValue.addOption(["", ""]);
+			var count = 0;
+			for (var xf in UIGeneratorInterface.UI.appVue.textAling) {
+				var current = UIGeneratorInterface.UI.appVue.textAling[xf];
+				// console.log(property, type, defaultValue, current, xf);
+				if (/left/.exec(current) !== null) var text = "left";
+				if (/center/.exec(current) !== null) var text = "center";
+				if (/right/.exec(current) !== null) var text = "right";
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(current, "i");
+				if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					componentValue.addOption([text, current, true]);
+				} else {
+					componentValue.addOption([text, current]);
+				}
+				count++;
+			}
+			currentIcon.setIcon("text_fields");
+		} else if (type === 'String' && property === "shadow") {
+			componentValue.addOption(["", ""]);
+			var count = 0;
+			for (var xf in UIGeneratorInterface.UI.appVue.shadow) {
+				var text = UIGeneratorInterface.UI.appVue.shadow[xf];
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(text, "i");
+				if (regExp.exec(text) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					componentValue.addOption([text, text, true]);
+				} else {
+					componentValue.addOption([text, text]);
+				}
+				count++;
+			}
+		} else if (type === 'Number' && property === "method") {
+			var options = ['GET', 'POST'];
+			var count = 0;
+			for (var ge in options) {
+				var text = options[ge];
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(text, "i");
+				if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					componentValue.addOption([text, text, true]);
+				} else {
+					componentValue.addOption([text, text]);
+				}
+				count++;
+			}
+		} else if (type === 'Number' && property === "type") {
+			var options;
+			if (/input/i.exec(currentNameComponent) !== null) {
+				options = ['text', 'email', 'password'];
+			} else if (/button/i.exec(currentNameComponent) !== null) {
+				options = ['button', 'submit', 'reset'];
+			}
+			var count = 0;
+			for (var ge in options) {
+				var text = options[ge];
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(text, "i");
+				if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					componentValue.addOption([text, text, true]);
+				} else {
+					componentValue.addOption([text, text]);
+				}
+				count++;
+			}
+		} else if (type === 'String' && property === "wave") {
+			componentValue.addOption(["", ""]);
+			for (var xf in UIGeneratorInterface.UI.appVue.waves) {
+				var mode = UIGeneratorInterface.UI.appVue.waves[xf];
+				for (var ge in mode) {
+					var text = mode[ge];
+					componentValue.addOption([xf + '(' + ge + '): ' + text, text]);
+				}
+			}
+		} else if ((type === 'String' || type === 'Number') && property === "size") {
+			var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
+			if (/Icon/i.exec(nameComponent) !== null) {
+				var vectorOptions = UIGeneratorInterface.UI.appVue.sizeIcon;
+			} else if (/Card/i.exec(nameComponent) !== null) {
+				var vectorOptions = UIGeneratorInterface.UI.appVue.sizeCard;
+			} else if (/Preloader/i.exec(nameComponent) !== null) {
+				var vectorOptions = UIGeneratorInterface.UI.appVue.sizePreloader;
+			} else if (/Button/i.exec(nameComponent) !== null || /dropdown/i.exec(nameComponent) !== null) {
+				var vectorOptions = UIGeneratorInterface.UI.appVue.sizeButton;
+			} else if ("H" === nameComponent) {
+				var vectorOptions = [1, 2, 3, 4, 5, 6];
+			}
+			componentValue.addOption(["", ""]);
+			var count = 0;
+			for (var xf in vectorOptions) {
+				var current = vectorOptions[xf];
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(current, "i");
+				if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					componentValue.addOption([current, current, defaultValue]);
+				} else {
+					componentValue.addOption([current, current]);
+				}
+				count++;
+			}
+		} else if (type === 'Boolean') {
+			componentValue.setValue(defaultValue);
+		} else if ((type === 'String' || type === 'Number') && property === "mode") {
+			var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
+			//set default values modes
+			if (/Preloader/i.exec(nameComponent) !== null) {
+				var vectorOptions = new Array();
+				vectorOptions.push("indeterminate");
+				vectorOptions.push("determinate");
+			} else if (/collection/i.exec(nameComponent) !== null) {
+				var vectorOptions = new Array();
+				vectorOptions.push("basic");
+				vectorOptions.push("link");
+				vectorOptions.push("headers");
+			}
+			// console.log(property, type, defaultValue);
+			componentValue.addOption(["", ""]);
+			for (var xf in vectorOptions) {
+				var current = vectorOptions[xf];
+				var regExp = new RegExp(defaultValue, "i");
+				var regExp2 = new RegExp(current, "i");
+				if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
+					if (xf === String(defaultValue)) {
+						componentValue.addOption([current, current, true]);
+					} else {
+						componentValue.addOption([current, current, defaultValue]);
+					}
+				} else {
+					componentValue.addOption([current, current]);
+				}
+			}
+		} else if ((property === "s" || property === "m" || property === "l" || property === "xl" || property === "progress") && type === "Number") {
+			// console.log(property, type, defaultValue, componentValue);
+			componentValue.setValue(defaultValue);
+		}
+
+		$(currentIcon.$el)
+			.css("margin-left", "10px");
+		$(currentIcon.$el)
+			.css("margin-right", "10px");
+		$(currentIcon.$el)
+			.css("flex", "0 0 0%");
+
+		$(componentContainer.$el)
+			.css("align-items", "center");
+		$(componentContainer.$el)
+			.css("display", "flex");
+		$(componentProperty.$el)
+			.css("margin-right", "10px");
+		$(componentProperty.$el)
+			.css("flex", "0 0 0%");
+		$(componentValue.$el)
+			.css("margin-right", "15px")
+			.css("flex", "2");
+
+		$(componentValue.$el)
+			.removeClass("input-field");
+
+		if (changeColor) {
+			componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[7]);
+		} else {
+			componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[9]);
+		}
+
+		//set Icons
+		if ("show" === property) currentIcon.setIcon("visibility");
+		if ("shadow" === property) currentIcon.setIcon("filter_none");
+		if (/color/i.exec(property) !== null) {
+			if (/text/i.exec(property) !== null) {
+				currentIcon.setIcon("format_color_text");
+			} else {
+				currentIcon.setIcon("format_color_fill");
+			}
+			UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
+		} else {
+			//define event
+			if (/icon/i.exec(property) !== null) {
+				UIGeneratorInterface.UI.panelIconInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
+			}
+			UIGeneratorInterface.UI.resolveComponentValueEvent(componentValue);
+		}
+
+		if ("mode" === property) currentIcon.setIcon("swap_horiz");
+		if ("progress" === property) currentIcon.setIcon("trending_flat");
+		if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
+		if (/style/.exec(property) !== null) currentIcon.setIcon("style");
+		if (/text/.exec(property) !== null) {
+			if ("text" === property) {
+				currentIcon.setIcon("edit");
+			} else {
+				currentIcon.setIcon("format_align_left");
+			}
+
+		}
+		if (/file|action/.exec(property) !== null) currentIcon.setIcon("insert_drive_file");
+		if ("valign" === property) currentIcon.setIcon("vertical_align_center");
+		if ("flowText" === property) currentIcon.setIcon("format_size");
+		if ("hoverable" === property) currentIcon.setIcon("compare");
+		if ("new" === property) currentIcon.setIcon("fiber_new");
+		if (/src|href/.exec(property) !== null) currentIcon.setIcon("insert_link");
+		if ("circle" === property) currentIcon.setIcon("account_circle");
+		if ("name" === property) currentIcon.setIcon("font_download");
+		if ("materialbox" === property) currentIcon.setIcon("crop_free");
+		if ("responsive" === property) currentIcon.setIcon("view_quilt");
+		if (/float/i.exec(property) !== null) {
+			currentIcon.setIcon("dashboard");
+			$(currentIcon.$el).css("transform", "rotate(90deg)");
+		}
+		if ("disable" === property) currentIcon.setIcon("lock_outline");
+		if ("container" === property) currentIcon.setIcon("view_array");
+		if ("cardpanel" === property) currentIcon.setIcon("aspect_ratio");
+		if ("wave" === property) currentIcon.setIcon("fingerprint");
+		if ("type" === property) currentIcon.setIcon("title");
+		if ("truncate" === property) {
+			currentIcon.setIcon("keyboard_tab");
+			$(currentIcon.$el).css("transform", "rotate(180deg)");
+		}
+
+		setTimeout(function() {
+			UIGeneratorInterface.UI.ulsObject.div.setShow(1);
+			$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el)
+				.css("width", "270px");
+			$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
+				.css("right", "278px");
+		}, 500);
+	}
 	panelPropertyRightUpdate(e) {
 		UIGeneratorInterface.UI.ulsObject.div.setShow(0);
 
@@ -768,7 +1089,6 @@ let UIGeneratorInterface = class {
 				var ff = 0;
 				UIGeneratorInterface.UI.save.componentProperty = new Array();
 				for (var x in allProperty) {
-					var changeColor = (ff % 2 === 0);
 					var p = x.substr(1);
 					var t = allProperty[x].type.name;
 					if (t === "Array") {
@@ -779,303 +1099,25 @@ let UIGeneratorInterface = class {
 
 					var property = p;
 					var type = t;
-					var defaultValue = d;
+					var tempDefaultValue = d;
 					if (disableProperty.indexOf(property) === -1) {
-						// console.log(property, type);
-						UIGeneratorInterface.UI.save.tempProperty = new Object();
-						UIGeneratorInterface.UI.save.tempProperty.name = property;
-						UIGeneratorInterface.UI.save.tempProperty.value = defaultValue;
-						UIGeneratorInterface.UI.save.componentProperty.push(UIGeneratorInterface.UI.save.tempProperty);
-
-						var componentContainer = UIGeneratorInterface.UI.appVue.newComponent("c-div");
-						var componentProperty = UIGeneratorInterface.UI.appVue.newComponent("c-p")
-							.setText(property)
-							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-
-
-						//define component container, in type and property
-						if ((type === 'Array' || type === 'String') && (/color|icon/i.exec(property) !== null)) {
-							var color;
-							color = UIGeneratorInterface.UI.appVue.colorText.bwt[1];
-
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-button")
-								.setColorText(color);
-						} else if (type === 'String' && /textAling|float/.exec(property) !== null) {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						} else if (type === 'String' && property === "shadow") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
-						} else if (type === 'Number' && property === "method") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
-						} else if (type === 'Number' && property === "type") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
-						} else if ((type === 'String' || type === 'Number') && property === "size") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
-						} else if (type === 'String' && property === "wave") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select");
-						} else if (type === 'Boolean') {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-switch").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						} else if ((type === 'String' || type === 'Number') && property === "mode") {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-select").setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
-						} else if (type === 'Object') {
-
-						} else if (type === 'Date') {
-
-						} else if (type === 'Function') {
-
-						} else if (type === 'Symbol') {
-
+						if (type === "Array") {
+							for (var x in tempDefaultValue) {
+								var changeColor = (ff % 2 === 0);
+								var defaultValue = tempDefaultValue[x];
+								var postfix = "-" + x;
+								var propertyArray = property + postfix;
+								UIGeneratorInterface.UI.setProperty(propertyArray, type, defaultValue, currentNameComponent, changeColor);
+								ff++;
+							}
 						} else {
-							var componentValue = UIGeneratorInterface.UI.appVue.newComponent("c-input-fields")
-								.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+							var changeColor = (ff % 2 === 0);
+							var defaultValue = tempDefaultValue;
+							UIGeneratorInterface.UI.setProperty(property, type, defaultValue, currentNameComponent, changeColor);
+							ff++;
 						}
-						componentValue.property = property;
-						var currentIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon")
-							.setIcon("extension")
-							.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1])
-							.setFloat(UIGeneratorInterface.UI.appVue.float.l);
-						//define title panel
-						UIGeneratorInterface.UI.ulsObject.p.setText("Component : " + currentNameComponent.charAt(2)
-								.toUpperCase() + currentNameComponent.slice(3))
-							.setColor(UIGeneratorInterface.UI.appVue.color.indigo[5])
-							.setCardpanel(1);
-						$(UIGeneratorInterface.UI.ulsObject.p.$el)
-							.css("margin-top", "0px")
-							.css("padding", "12px");
-						//mounted property
-						UIGeneratorInterface.UI.ulsObject.div.create(componentContainer);
-						componentContainer.create(currentIcon);
-						componentContainer.create(componentProperty);
-						componentContainer.create(componentValue);
-
-						//set Option c-input-select before mounted
-						if (type === 'String' && /textAling|float/.exec(property) !== null) {
-							componentValue.addOption(["", ""]);
-							var count = 0;
-							for (var xf in UIGeneratorInterface.UI.appVue.textAling) {
-								var current = UIGeneratorInterface.UI.appVue.textAling[xf];
-								// console.log(property, type, defaultValue, current, xf);
-								if (/left/.exec(current) !== null) var text = "left";
-								if (/center/.exec(current) !== null) var text = "center";
-								if (/right/.exec(current) !== null) var text = "right";
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(current, "i");
-								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									componentValue.addOption([text, current, true]);
-								} else {
-									componentValue.addOption([text, current]);
-								}
-								count++;
-							}
-							currentIcon.setIcon("text_fields");
-						} else if (type === 'String' && property === "shadow") {
-							componentValue.addOption(["", ""]);
-							var count = 0;
-							for (var xf in UIGeneratorInterface.UI.appVue.shadow) {
-								var text = UIGeneratorInterface.UI.appVue.shadow[xf];
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(text, "i");
-								if (regExp.exec(text) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									componentValue.addOption([text, text, true]);
-								} else {
-									componentValue.addOption([text, text]);
-								}
-								count++;
-							}
-						} else if (type === 'Number' && property === "method") {
-							var options = ['GET', 'POST'];
-							var count = 0;
-							for (var ge in options) {
-								var text = options[ge];
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(text, "i");
-								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									componentValue.addOption([text, text, true]);
-								} else {
-									componentValue.addOption([text, text]);
-								}
-								count++;
-							}
-						} else if (type === 'Number' && property === "type") {
-							var options;
-							if (/input/i.exec(currentNameComponent) !== null) {
-								options = ['text', 'email', 'password'];
-							} else if (/button/i.exec(currentNameComponent) !== null) {
-								options = ['button', 'submit', 'reset'];
-							}
-							var count = 0;
-							for (var ge in options) {
-								var text = options[ge];
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(text, "i");
-								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(ge) === String(defaultValue) && isNaN(parseInt(ge)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									componentValue.addOption([text, text, true]);
-								} else {
-									componentValue.addOption([text, text]);
-								}
-								count++;
-							}
-						} else if (type === 'String' && property === "wave") {
-							componentValue.addOption(["", ""]);
-							for (var xf in UIGeneratorInterface.UI.appVue.waves) {
-								var mode = UIGeneratorInterface.UI.appVue.waves[xf];
-								for (var ge in mode) {
-									var text = mode[ge];
-									componentValue.addOption([xf + '(' + ge + '): ' + text, text]);
-								}
-							}
-						} else if ((type === 'String' || type === 'Number') && property === "size") {
-							var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
-							if (/Icon/i.exec(nameComponent) !== null) {
-								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeIcon;
-							} else if (/Card/i.exec(nameComponent) !== null) {
-								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeCard;
-							} else if (/Preloader/i.exec(nameComponent) !== null) {
-								var vectorOptions = UIGeneratorInterface.UI.appVue.sizePreloader;
-							} else if (/Button/i.exec(nameComponent) !== null || /dropdown/i.exec(nameComponent) !== null) {
-								var vectorOptions = UIGeneratorInterface.UI.appVue.sizeButton;
-							} else if ("H" === nameComponent) {
-								var vectorOptions = [1, 2, 3, 4, 5, 6];
-							}
-							componentValue.addOption(["", ""]);
-							var count = 0;
-							for (var xf in vectorOptions) {
-								var current = vectorOptions[xf];
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(current, "i");
-								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									componentValue.addOption([current, current, defaultValue]);
-								} else {
-									componentValue.addOption([current, current]);
-								}
-								count++;
-							}
-						} else if (type === 'Boolean') {
-							componentValue.setValue(defaultValue);
-						} else if ((type === 'String' || type === 'Number') && property === "mode") {
-							var nameComponent = currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3);
-							//set default values modes
-							if (/Preloader/i.exec(nameComponent) !== null) {
-								var vectorOptions = new Array();
-								vectorOptions.push("indeterminate");
-								vectorOptions.push("determinate");
-							} else if (/collection/i.exec(nameComponent) !== null) {
-								var vectorOptions = new Array();
-								vectorOptions.push("basic");
-								vectorOptions.push("link");
-								vectorOptions.push("headers");
-							}
-							// console.log(property, type, defaultValue);
-							componentValue.addOption(["", ""]);
-							for (var xf in vectorOptions) {
-								var current = vectorOptions[xf];
-								var regExp = new RegExp(defaultValue, "i");
-								var regExp2 = new RegExp(current, "i");
-								if (regExp.exec(current) !== null || regExp2.exec(defaultValue) !== null || String(xf) === String(defaultValue) && isNaN(parseInt(xf)) || String(count) === String(defaultValue) && isNaN(parseInt(defaultValue))) {
-									if (xf === String(defaultValue)) {
-										componentValue.addOption([current, current, true]);
-									} else {
-										componentValue.addOption([current, current, defaultValue]);
-									}
-								} else {
-									componentValue.addOption([current, current]);
-								}
-							}
-						} else if ((property === "s" || property === "m" || property === "l" || property === "xl" || property === "progress") && type === "Number") {
-							// console.log(property, type, defaultValue, componentValue);
-							componentValue.setValue(defaultValue);
-						}
-
-						$(currentIcon.$el)
-							.css("margin-left", "10px");
-						$(currentIcon.$el)
-							.css("margin-right", "10px");
-						$(currentIcon.$el)
-							.css("flex", "0 0 0%");
-
-						$(componentContainer.$el)
-							.css("align-items", "center");
-						$(componentContainer.$el)
-							.css("display", "flex");
-						$(componentProperty.$el)
-							.css("margin-right", "10px");
-						$(componentProperty.$el)
-							.css("flex", "0 0 0%");
-						$(componentValue.$el)
-							.css("margin-right", "15px")
-							.css("flex", "2");
-
-						$(componentValue.$el)
-							.removeClass("input-field");
-
-						if (changeColor) {
-							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[7]);
-						} else {
-							componentContainer.setColor(UIGeneratorInterface.UI.appVue.color.indigo[9]);
-						}
-
-						//set Icons
-						if ("show" === property) currentIcon.setIcon("visibility");
-						if ("shadow" === property) currentIcon.setIcon("filter_none");
-						if (/color/i.exec(property) !== null) {
-							if (/text/i.exec(property) !== null) {
-								currentIcon.setIcon("format_color_text");
-							} else {
-								currentIcon.setIcon("format_color_fill");
-							}
-							UIGeneratorInterface.UI.panelColorInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
-						} else {
-							//define event
-							if (/icon/i.exec(property) !== null) {
-								UIGeneratorInterface.UI.panelIconInitialize(property, componentValue, currentNameComponent.charAt(2).toUpperCase() + currentNameComponent.slice(3), defaultValue);
-							}
-							UIGeneratorInterface.UI.resolveComponentValueEvent(componentValue);
-						}
-
-						if ("mode" === property) currentIcon.setIcon("swap_horiz");
-						if ("progress" === property) currentIcon.setIcon("trending_flat");
-						if (/size/.exec(property) !== null) currentIcon.setIcon("photo_size_select_small");
-						if (/style/.exec(property) !== null) currentIcon.setIcon("style");
-						if (/text/.exec(property) !== null) {
-							if ("text" === property) {
-								currentIcon.setIcon("edit");
-							} else {
-								currentIcon.setIcon("format_align_left");
-							}
-
-						}
-						if (/file|action/.exec(property) !== null) currentIcon.setIcon("insert_drive_file");
-						if ("valign" === property) currentIcon.setIcon("vertical_align_center");
-						if ("flowText" === property) currentIcon.setIcon("format_size");
-						if ("hoverable" === property) currentIcon.setIcon("compare");
-						if ("new" === property) currentIcon.setIcon("fiber_new");
-						if (/src|href/.exec(property) !== null) currentIcon.setIcon("insert_link");
-						if ("circle" === property) currentIcon.setIcon("account_circle");
-						if ("name" === property) currentIcon.setIcon("font_download");
-						if ("materialbox" === property) currentIcon.setIcon("crop_free");
-						if ("responsive" === property) currentIcon.setIcon("view_quilt");
-						if (/float/i.exec(property) !== null) {
-							currentIcon.setIcon("dashboard");
-							$(currentIcon.$el).css("transform", "rotate(90deg)");
-						}
-						if ("disable" === property) currentIcon.setIcon("lock_outline");
-						if ("container" === property) currentIcon.setIcon("view_array");
-						if ("cardpanel" === property) currentIcon.setIcon("aspect_ratio");
-						if ("wave" === property) currentIcon.setIcon("fingerprint");
-						if ("type" === property) currentIcon.setIcon("title");
-						if ("truncate" === property) {
-							currentIcon.setIcon("keyboard_tab");
-							$(currentIcon.$el).css("transform", "rotate(180deg)");
-						}
-
-						setTimeout(function() {
-							UIGeneratorInterface.UI.ulsObject.div.setShow(1);
-							$(UIGeneratorInterface.UI.ulsObject.panelPropertyRight.$el)
-								.css("width", "270px");
-							$(UIGeneratorInterface.UI.ulpObject.panelRight.$el)
-								.css("right", "278px");
-						}, 500);
-						ff++;
 					}
+
 				}
 			}, 500);
 

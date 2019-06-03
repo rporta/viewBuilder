@@ -198,7 +198,7 @@ var preloader = new configComponent({
 			type: Array,
 			required: false,
 			default: function() {
-				return new Array(null, null)
+				return new Array("red", "blue")
 			},
 		},
 		pshow: {
@@ -4128,7 +4128,7 @@ var preloaderFull = new configComponent({
 			type: Array,
 			required: false,
 			default: function() {
-				return new Array(null, null)
+				return new Array("red", "blue")
 			},
 		},
 		pshow: {
