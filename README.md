@@ -3,7 +3,7 @@ experimental.
 Se inicia un proyecto con Vue.js v2.0.3 y Materialize v1.0.0
 
 //Bug :
-//1 . en algunos componentes, algunas propiedades constan de 2 valores, puesto que el props es Array y solo aparece 1 solo valor en el panel de propiedades
+//algunas propiedades no aplican cambios
 
 //Funcionalidades pendientes por desarrollar :
 //1 . implementar cambio atras
