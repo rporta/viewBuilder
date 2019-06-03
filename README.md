@@ -3,7 +3,8 @@ experimental.
 Se inicia un proyecto con Vue.js v2.0.3 y Materialize v1.0.0
 
 //Bug :
-//algunas propiedades no aplican cambios
+//1 . algunas propiedades no aplican cambios
+//2 . al cargar component que tenga property component c-input-select, no cargar valor por default
 
 //Funcionalidades pendientes por desarrollar :
 //1 . implementar cambio atras
