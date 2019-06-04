@@ -318,6 +318,8 @@ var section = new configComponent({
 			show: this.pshow,
 			styleP: this.pstyleP,
 			d: this.pd,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -391,6 +393,16 @@ var section = new configComponent({
 			required: false,
 			default: 0,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()" class="section">{{this.text}}<slot></slot></div>\
@@ -415,15 +427,15 @@ var section = new configComponent({
 			return new Array(this.color, this.colorText, this.textAling, this.float, this.shadow, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", this.container ? container : "", (this.d == 0 ? "" : (this.d == 1 ? dline : (this.d == 2 ? dbox : "")))).join(" ");
 		},
 		setStyle: function() {
-			var stylePreload = {
-				position: "fixed",
-				top: "0px",
-				zIndex: "9999",
-				width: "100%",
-				height: "100%"
-			};
-			return this.styleP ? stylePreload : {};
-		},
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			// return styleDiv;
+		}
 	}
 });
 var div = new configComponent({
@@ -443,6 +455,8 @@ var div = new configComponent({
 			valign: this.pvalign,
 			container: this.pcontainer,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -511,6 +525,16 @@ var div = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)"  v-bind:class="this.setClass()"  v-bind:style="this.setStyle()">{{this.text}}<slot></slot></div>\
@@ -521,13 +545,14 @@ var div = new configComponent({
 			return this;
 		},
 		setStyle: function() {
-			var stylePreload = {
-				position: "absolute",
-				top: "50%",
-				left: "50%",
-				transform: "translate(-50%, -50%)"
-			};
-			return this.styleP ? stylePreload : {};
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
 		}
 	}
 });
@@ -711,6 +736,9 @@ var container = new configComponent({
 			valign: this.pvalign,
 			container: this.pcontainer,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
+
 		}
 	},
 	props: {
@@ -779,6 +807,16 @@ var container = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)"  v-bind:class="this.setClass()"  v-bind:style="this.setStyle()">{{this.text}}<slot></slot></div>\
@@ -789,14 +827,24 @@ var container = new configComponent({
 			return this;
 		},
 		setStyle: function() {
+			var styleDiv = new Object();
 			var stylePreload = {
-				position: "absolute",
-				top: "50%",
-				left: "50%",
-				transform: "translate(-50%, -50%)"
+
 			};
 			return this.styleP ? stylePreload : {};
-		},
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			} else {
+				if (this.pstyleP) {
+					styleDiv.position = "absolute";
+					styleDiv.top = "0px";
+					styleDiv.zIndex = "9999";
+					styleDiv.width = "100%";
+				}
+			}
+		}
 	},
 });
 var row = new configComponent({
@@ -815,6 +863,8 @@ var row = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -878,12 +928,31 @@ var row = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" class="row">{{this.text}}<slot></slot></div>\
+	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" class="row" v-bind:style="this.setStyle()">{{this.text}}<slot></slot></div>\
 	</transition>',
 	methods: {
+		setStyle: function() {
+			var styleDiv = new Object();
 
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 	},
 });
 var col = new configComponent({
@@ -907,6 +976,8 @@ var col = new configComponent({
 			m: this.pm,
 			l: this.pl,
 			xl: this.pxl,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -990,9 +1061,19 @@ var col = new configComponent({
 			required: false,
 			default: 12,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" class="col">{{this.text}}<slot></slot></div>\
+	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" class="col" v-bind:style="this.setStyle()">{{this.text}}<slot></slot></div>\
 	</transition>',
 	methods: {
 		setAll: function(arg) {
@@ -1030,6 +1111,16 @@ var col = new configComponent({
 			var container = "container";
 			return new Array(this.color, this.colorText, this.textAling, this.float, this.shadow, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", typeof this.s === "number" ? s + this.s : s + 12, typeof this.m === "number" ? m + this.m : m + 12, typeof this.l === "number" ? l + this.l : l + 12, typeof this.xl === "number" ? xl + this.xl : xl + 12, this.container ? container : "").join(" ").trim();
 		},
+		setStyle: function() {
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 	},
 });
 
@@ -1049,6 +1140,8 @@ var header = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -1112,11 +1205,31 @@ var header = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<header key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">{{this.text}}<slot></slot></header>\
+	<header key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()">{{this.text}}<slot></slot></header>\
 	</transition>',
 	methods: {
+		setStyle: function() {
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 
 	}
 });
@@ -1137,6 +1250,8 @@ var main = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -1200,12 +1315,31 @@ var main = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<main key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">{{this.text}}<slot></slot></main>\
+	<main key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()">{{this.text}}<slot></slot></main>\
 	</transition>',
 	methods: {
+		setStyle: function() {
+			var styleDiv = new Object();
 
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 	}
 });
 
@@ -1225,6 +1359,8 @@ var footer = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -1288,12 +1424,31 @@ var footer = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<footer key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">{{this.text}}<slot></slot></footer>\
+	<footer key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()">{{this.text}}<slot></slot></footer>\
 	</transition>',
 	methods: {
+		setStyle: function() {
+			var styleDiv = new Object();
 
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 	}
 });
 var h = new configComponent({
@@ -1952,6 +2107,8 @@ var form = new configComponent({
 			show: this.pshow,
 			file: this.pfile,
 			method: this.pmethod,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -2020,9 +2177,19 @@ var form = new configComponent({
 			required: false,
 			default: 0,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
-	<div v-bind:is="this.generateTag()" key="this.generateId(5)" v-show="this.show" v-bind:action="this.action" v-bind:method="this.generateMethod()" v-bind:enctype="this.generateEnctype()" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()"><slot></slot></div>\
+	<div v-bind:is="this.generateTag()" key="this.generateId(5)" v-show="this.show" v-bind:action="this.action" v-bind:method="this.generateMethod()" v-bind:enctype="this.generateEnctype()" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()"><slot></slot></div>\
 	</transition>',
 	methods: {
 		generateTag: function() {
@@ -2045,6 +2212,16 @@ var form = new configComponent({
 			}
 			return this;
 		},
+		setStyle: function() {
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
+		}
 	}
 });
 var table = new configComponent({
@@ -2685,6 +2862,10 @@ var inputRange = new configComponent({
 	data: function() {
 		return {
 			show: this.pshow,
+			min: this.pmin,
+			max: this.pmax,
+			name: this.pname,
+			start: this.pstart
 		}
 	},
 	props: {
@@ -2693,12 +2874,32 @@ var inputRange = new configComponent({
 			required: false,
 			default: true,
 		},
+		pname: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		pmin: {
+			type: Number,
+			required: false,
+			default: 0,
+		},
+		pmax: {
+			type: Number,
+			required: false,
+			default: 100,
+		},
+		pstart: {
+			type: Number,
+			required: false,
+			default: 50,
+		},
 	},
-	template: '<transition name="fade">\
-		<p class="" key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">\
-			<input type="range" id="test5" min="0" max="100" style="border:none"/>\
+	template: '<transition-group name="fade">\
+		<p key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" style="margin: 50px 0px 10px 0px;">\
+			<div key="this.generateId(5)" v-bind:id="this.generateId(5)" style="border:none"></div>\
 		</p>\
-	</transition>',
+	</transition-group>',
 	methods: {
 		setClass: function() {
 			var tempClass = this.setClassDefault();
@@ -2706,6 +2907,19 @@ var inputRange = new configComponent({
 			tempClass.push("range-field");
 			return tempClass.join(" ");
 		},
+	},
+	mounted: function() {
+		this.$nextTick(function() {
+			var input = this.$el.children[0];
+			noUiSlider.create(input, {
+				start: [this.pstart],
+				//step: 1000,
+				range: {
+					'min': this.min,
+					'max': this.max
+				}
+			});
+		})
 	}
 });
 var inputFields = new configComponent({
@@ -4335,6 +4549,17 @@ var preloaderCircleFull = new configComponent({
 		csection.create(ccontainer);
 		ccontainer.create(preloaderCircle);
 		var section = createElement('c-section');
+
+		$(csection.$el)
+			.css("position", "absolute")
+			.css("display", "grid")
+			.css("width", "100%")
+			.css("height", "100%")
+			.css("z-index", "99999");
+
+		csection.setValign(true);
+		csection.setTextAling("center-align");
+		csection;
 		section.child = csection;
 		return section;
 	},

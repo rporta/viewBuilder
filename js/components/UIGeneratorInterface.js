@@ -456,7 +456,10 @@ let UIGeneratorInterface = class {
 			if (UIGeneratorInterface.UI.save.tempComponentName) {
 				UIGeneratorInterface.UI.save.tempInstance = UIGeneratorInterface.UI.appVue.newComponent(UIGeneratorInterface.UI.save.tempComponentName);
 				UIGeneratorInterface.UI.plObject.previsualizationLayer.create(UIGeneratorInterface.UI.save.tempInstance);
+				$(UIGeneratorInterface.UI.save.tempInstance.$el).css("overflow-wrap", "break-word");
+				$(UIGeneratorInterface.UI.save.tempInstance.$el).css("display", "block");
 				$(UIGeneratorInterface.UI.save.tempInstance.$el).css("position", "absolute");
+				// $(UIGeneratorInterface.UI.save.tempInstance.$el).css("z-index", "9999");
 				delete UIGeneratorInterface.UI.save.tempComponentName;
 			}
 			if (typeof UIGeneratorInterface.UI.save.tempInstance !== "undefined" &&
