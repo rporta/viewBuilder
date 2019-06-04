@@ -65,6 +65,7 @@ var app = new Vue({
 		[inputCheckbox.name]: inputCheckbox,
 		[inputRadio.name]: inputRadio,
 		[inputSelect.name]: inputSelect,
+		[inputRange.name]: inputRange,
 		/*quedan 8 components-input pendientes */
 		/*macro-components-preloader*/
 		[preloaderFull.name]: preloaderFull,

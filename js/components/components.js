@@ -108,7 +108,7 @@ let configComponent = class {
 				sensitivity: 'base'
 			}) === 0 ? true : false;
 		}
-		setMethods.setClass = function(arg) {
+		setMethods.setClassDefault = function(arg = null) {
 			let setClass = new Array();
 			//default class
 			for (let i in this.$data) {
@@ -143,6 +143,9 @@ let configComponent = class {
 				default: break;
 			}
 			return setClass.join(" ").trim();
+		}
+		setMethods.setClass = function(arg = null) {
+			return this.setClassDefault(arg);
 		}
 		//set methods && obj.methods
 		this.methods = Object.assign(setMethods, obj.methods);
@@ -2676,6 +2679,34 @@ var inputSelect = new configComponent({
 			$('.select-dropdown.dropdown-trigger').addClass("white-text");
 		});
 	},
+});
+var inputRange = new configComponent({
+	name: "c-input-range",
+	data: function() {
+		return {
+			show: this.pshow,
+		}
+	},
+	props: {
+		pshow: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
+	},
+	template: '<transition name="fade">\
+		<p class="" key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()">\
+			<input type="range" id="test5" min="0" max="100" style="border:none"/>\
+		</p>\
+	</transition>',
+	methods: {
+		setClass: function() {
+			var tempClass = this.setClassDefault();
+			tempClass = tempClass.split(" ");
+			tempClass.push("range-field");
+			return tempClass.join(" ");
+		},
+	}
 });
 var inputFields = new configComponent({
 	name: "c-input-fields",
