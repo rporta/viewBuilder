@@ -13,24 +13,47 @@ let UIGeneratorInterface = class {
 		}
 		return UIGeneratorInterface.UI;
 	}
+	showAvatar() {
+		fetch('save/save.json')
+			.then(function(response) {
+				return response.json();
+			})
+			.then(function(json) {});
+	}
 	constructor(appVue) {
-		this.appVue = appVue;
+		(async (appVue) => {
+			//setp 1 load json 
+			var save = await (() => {
+				return new Promise(resolve => {
+					fetch('save/save.json')
+						.then(function(response) {
+							resolve(response.json());
+						})
+						.then(function(json) {});
+				});
+			})();
 
-		//CREATE previsualizationLayer
-		this.previsualizationLayer();
+			console.log(save);
 
-		//CREATE UI LAYER SECONDARY
-		this.uiLayerSecondary();
+			this.appVue = appVue;
 
-		//CREATE UI LAYER PRIMARY
-		this.uiLayerPrimary();
+			//CREATE previsualizationLayer
+			this.previsualizationLayer();
 
-		//REGISTER EVENTS 
-		this.registerEvents();
+			//CREATE UI LAYER SECONDARY
+			this.uiLayerSecondary();
+
+			//CREATE UI LAYER PRIMARY
+			this.uiLayerPrimary();
+
+			//REGISTER EVENTS 
+			this.registerEvents();
+		})(appVue);
 	}
 	uiLayerPrimary() {
 		//parameters config
 		this.ulpProperty = new Object();
+		this.ulpProperty.ButtonComponentList = false;
 		this.ulpProperty.ButtonPantallaCompleta = false;
 		this.ulpProperty.ButtonRegilla = false;
 		this.ulpProperty.ButtonEscala = false;
@@ -73,6 +96,8 @@ let UIGeneratorInterface = class {
 
 		this.ulpObject.ButtonRegilla = this.appVue.newComponent("c-button").setColor("purple");
 		this.ulpObject.ButtonEscala = this.appVue.newComponent("c-button").setColor("purple");
+
+		this.ulpObject.ButtonLstComponent = this.appVue.newComponent("c-button");
 		this.ulpObject.ButtonAtras = this.appVue.newComponent("c-button");
 		this.ulpObject.ButtonAdelante = this.appVue.newComponent("c-button");
 		this.ulpObject.ButtonGuardar = this.appVue.newComponent("c-button");
@@ -83,6 +108,7 @@ let UIGeneratorInterface = class {
 		this.ulpObject.panelLeft.create(this.ulpObject.ButtonEscala);
 
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonPropiedades);
+		this.ulpObject.panelRight.create(this.ulpObject.ButtonLstComponent);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAtras);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonAdelante);
 		this.ulpObject.panelRight.create(this.ulpObject.ButtonGuardar);
@@ -95,6 +121,10 @@ let UIGeneratorInterface = class {
 		$(this.ulpObject.ButtonEscala.$el)
 			.css("position", "relative")
 			.css("margin", "2px");
+
+		$(this.ulpObject.ButtonLstComponent.$el)
+			.css("position", "relative")
+			.css("margin", "2.5px");
 
 		$(this.ulpObject.ButtonAtras.$el)
 			.css("position", "relative")
@@ -121,6 +151,8 @@ let UIGeneratorInterface = class {
 			.setIcon("grid_off");
 		this.ulpObject.IconEscala = this.appVue.newComponent("c-icon")
 			.setIcon("check_box_outline_blank");
+		this.ulpObject.IconListComponent = this.appVue.newComponent("c-icon")
+			.setIcon("list");
 		this.ulpObject.IconAtras = this.appVue.newComponent("c-icon")
 			.setIcon("undo");
 		this.ulpObject.IconAdelante = this.appVue.newComponent("c-icon")
@@ -134,6 +166,7 @@ let UIGeneratorInterface = class {
 
 		this.ulpObject.ButtonRegilla.create(this.ulpObject.IconRegilla);
 		this.ulpObject.ButtonEscala.create(this.ulpObject.IconEscala);
+		this.ulpObject.ButtonLstComponent.create(this.ulpObject.IconListComponent);
 		this.ulpObject.ButtonAtras.create(this.ulpObject.IconAtras);
 		this.ulpObject.ButtonAdelante.create(this.ulpObject.IconAdelante);
 		this.ulpObject.ButtonGuardar.create(this.ulpObject.IconGuardar);
@@ -281,6 +314,15 @@ let UIGeneratorInterface = class {
 		this.previsualizationLayerEvents();
 	}
 	uiLayerPrimaryEvents() {
+		$(this.ulpObject.ButtonLstComponent.$el).click(function(e) {
+			if (UIGeneratorInterface.UI.ulpProperty.ButtonComponentList) {
+
+			} else {
+
+			}
+			UIGeneratorInterface.UI.ulpProperty.ButtonComponentList = !UIGeneratorInterface.UI.ulpProperty.ButtonComponentList;
+		});
+
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
 		$(this.ulpObject.ButtonPantallaCompleta.$el)
 			.click(function(e) {
@@ -292,6 +334,7 @@ let UIGeneratorInterface = class {
 						.css("width", "80px");
 					UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
 					UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(1);
+					UIGeneratorInterface.UI.ulpObject.ButtonLstComponent.setShow(1);
 					UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(1);
 					UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(1);
 					UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(1);
@@ -312,6 +355,7 @@ let UIGeneratorInterface = class {
 					$(UIGeneratorInterface.UI.ulsObject.panelComponentLeft.$el)
 						.css("width", "0px");
 					UIGeneratorInterface.UI.ulpObject.panelLeft.setShow(0);
+					UIGeneratorInterface.UI.ulpObject.ButtonLstComponent.setShow(0);
 					UIGeneratorInterface.UI.ulpObject.ButtonAtras.setShow(0);
 					UIGeneratorInterface.UI.ulpObject.ButtonAdelante.setShow(0);
 					UIGeneratorInterface.UI.ulpObject.ButtonGuardar.setShow(0);

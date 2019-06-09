@@ -194,6 +194,8 @@ var preloader = new configComponent({
 			space: ' ',
 			percentage: '%',
 			progress: this.pprogress,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -219,6 +221,16 @@ var preloader = new configComponent({
 			required: false,
 			default: 40,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)"  v-bind:class="color[0]"  class="progress" >\
@@ -243,12 +255,21 @@ var preloader = new configComponent({
 					width: this.progress + this.percentage
 				};
 			}
-			return out;
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv + " " + out;
 		},
 		setProgress: function(arg) {
 			this.progress = arg;
 			return this;
 		},
+
+
 	},
 });
 var preloaderCircle = new configComponent({
@@ -828,22 +849,13 @@ var container = new configComponent({
 		},
 		setStyle: function() {
 			var styleDiv = new Object();
-			var stylePreload = {
 
-			};
-			return this.styleP ? stylePreload : {};
 			if (this.width !== null && this.height !== null) {
 				styleDiv.width = this.width + 'px';
 				styleDiv.height = this.height + 'px';
 				styleDiv.display = "grid";
-			} else {
-				if (this.pstyleP) {
-					styleDiv.position = "absolute";
-					styleDiv.top = "0px";
-					styleDiv.zIndex = "9999";
-					styleDiv.width = "100%";
-				}
 			}
+			return styleDiv;
 		}
 	},
 });
@@ -1953,6 +1965,16 @@ var pre = new configComponent({
 			type: Boolean,
 			required: false,
 			default: false,
+		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
 		},
 	},
 	template: '<transition name="fade">\
