@@ -33,7 +33,7 @@ let UIGeneratorInterface = class {
 				});
 			})();
 
-			console.log(save);
+			// console.log(save);
 
 			this.appVue = appVue;
 
@@ -582,6 +582,7 @@ let UIGeneratorInterface = class {
 		}
 	}
 	resolvePanelIcon(e) {
+
 		UIGeneratorInterface.UI.iconEvent = e;
 		if (UIGeneratorInterface.UI.panelIcon) {
 			UIGeneratorInterface.UI.panelIcon.$el.remove();
@@ -626,29 +627,31 @@ let UIGeneratorInterface = class {
 			UIGeneratorInterface.UI.ulsObject.componentIcon = new Array();
 			UIGeneratorInterface.UI.ulsObject.componentButtonIcon = new Array();
 		}
+		UIGeneratorInterface.UI.iconProperty.icon = UIGeneratorInterface.UI.iconProperty;
 		for (var i in UIGeneratorInterface.UI.iconProperty.icon) {
 			var currentIcon = UIGeneratorInterface.UI.iconProperty.icon[i];
-			((i, currentIcon) => {
-				setTimeout(function() {
-					if (UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] && UIGeneratorInterface.UI.ulsObject.componentIcon[i]) {
-						UIGeneratorInterface.UI.ulsObject.componentIcon[i].$el.remove();
-						delete UIGeneratorInterface.UI.ulsObject.componentIcon[i];
-						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.remove();
-						delete UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i];
-					}
-					UIGeneratorInterface.UI.ulsObject.componentIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon(currentIcon);
-					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-button");
+
+			if (currentIcon.constructor.name !== "Array") {
+				((i, currentIcon) => {
+					setTimeout(function() {
+						if (UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] && UIGeneratorInterface.UI.ulsObject.componentIcon[i]) {
+							UIGeneratorInterface.UI.ulsObject.componentIcon[i].$el.remove();
+							delete UIGeneratorInterface.UI.ulsObject.componentIcon[i];
+							UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.remove();
+							delete UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i];
+						}
+						UIGeneratorInterface.UI.ulsObject.componentIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon(currentIcon);
+						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i] = UIGeneratorInterface.UI.appVue.newComponent("c-button");
 
 
-					UIGeneratorInterface.UI.panelcontainerIcon.create(UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i]);
-					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].create(UIGeneratorInterface.UI.ulsObject.componentIcon[i]);
-					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].defineIcon = currentIcon;
-					UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.addEventListener('click', UIGeneratorInterface.UI.resolveIcon, false);
-				}, 150);
-			})(i, currentIcon)
+						UIGeneratorInterface.UI.panelcontainerIcon.create(UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i]);
+						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].create(UIGeneratorInterface.UI.ulsObject.componentIcon[i]);
+						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].defineIcon = currentIcon;
+						UIGeneratorInterface.UI.ulsObject.componentButtonIcon[i].$el.addEventListener('click', UIGeneratorInterface.UI.resolveIcon, false);
+					}, 150);
+				})(i, currentIcon);
+			}
 		}
-
-
 	}
 	resolvePanelColor(e) {
 
