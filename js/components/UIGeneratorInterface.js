@@ -238,7 +238,8 @@ let UIGeneratorInterface = class {
 			.css("-moz-transition", "all 0.30s ease")
 			.css("-o-transition", "all 0.30s ease")
 			.css("-ms-transition", "all 0.30s ease")
-			.css("transition", "all 0.30s ease");
+			.css("transition", "all 0.30s ease")
+			.css("z-index", 1);
 
 		//object : panelPropertyRight
 		this.ulsObject.p = this.appVue.newComponent("c-p")
@@ -307,6 +308,7 @@ let UIGeneratorInterface = class {
 		this.plObject.previsualizationLayer = this.appVue.newComponent("c-div")
 			.setColor("green");
 		this.appVue.create(this.plObject.previsualizationLayer);
+		$(this.plObject.previsualizationLayer.$el).css("z-index", 1);
 	}
 	registerEvents() {
 		this.uiLayerPrimaryEvents();
