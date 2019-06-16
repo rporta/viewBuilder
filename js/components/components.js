@@ -594,6 +594,8 @@ var modal = new configComponent({
 			container: this.pcontainer,
 			valign: this.pvalign,
 			show: this.pshow,
+			width: this.pwidth,
+			height: this.pheight
 		}
 	},
 	props: {
@@ -662,6 +664,16 @@ var modal = new configComponent({
 			required: false,
 			default: true,
 		},
+		pwidth: {
+			type: Number,
+			required: false,
+			default: null,
+		},
+		pheight: {
+			type: Number,
+			required: false,
+			default: null,
+		},
 	},
 	template: '<transition name="fade">\
 	<div key="this.generateId(5)" v-show="this.show" v-bind:id="this.generateId(5)" v-bind:class="this.setClass()" v-bind:style="this.setStyle()" class="modal">\
@@ -677,14 +689,14 @@ var modal = new configComponent({
 			return this;
 		},
 		setStyle: function() {
-			var stylePreload = {
-				position: "fixed",
-				top: "0px",
-				zIndex: "9999",
-				width: "100%",
-				height: "100%"
-			};
-			return this.styleP ? stylePreload : {};
+			var styleDiv = new Object();
+
+			if (this.width !== null && this.height !== null) {
+				styleDiv.width = this.width + 'px';
+				styleDiv.height = this.height + 'px';
+				styleDiv.display = "grid";
+			}
+			return styleDiv;
 		},
 		open: function() {
 			this.$el.M_Modal.open();
