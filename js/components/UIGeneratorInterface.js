@@ -793,6 +793,31 @@ let UIGeneratorInterface = class {
 		UIGeneratorInterface.UI.panelColor.setShow(0);
 	}
 	resolveComponentValueEvent(componentValue) {
+		$(componentValue.$el).keyup(function(e) {
+			var tag = e.target.tagName;
+			if (/select/i.exec(tag) !== null) {
+				var val = $(e.target).val();
+			} else if (/input/i.exec(tag) !== null) {
+				var type = $(e.target).attr('type');
+				if (/checkbox/i.exec(type) !== null) {
+					var val = e.target.checked;
+				} else {
+					var val = $(e.target).val();
+				}
+
+			}
+			for (var i in UIGeneratorInterface.UI.save.componentProperty) {
+				if (UIGeneratorInterface.UI.save.componentProperty[i].name === componentValue.property) {
+					UIGeneratorInterface.UI.save.componentProperty[i].value = val;
+					//update property
+					for (var n in UIGeneratorInterface.UI.save.tempInstance) {
+						if (n === componentValue.property) {
+							UIGeneratorInterface.UI.save.tempInstance[n] = val;
+						}
+					}
+				}
+			}
+		});
 		$(componentValue.$el).change(function(e) {
 			var tag = e.target.tagName;
 			if (/select/i.exec(tag) !== null) {

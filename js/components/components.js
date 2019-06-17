@@ -3090,6 +3090,7 @@ var inputFields = new configComponent({
 			return this;
 		},
 		setValue(arg) {
+			console.log("fasf");
 			this.value = arg;
 
 			if (!this.$el) {
