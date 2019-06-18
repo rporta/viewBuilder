@@ -2460,6 +2460,9 @@ var button = new configComponent({
 			flat: this.pflat,
 			floating: this.pfloating,
 			type: this.ptype,
+			tooltips: this.ptooltips,
+			tooltipsPosition: this.ptooltipsPosition,
+			tooltipsText: this.ptooltipsText
 		}
 	},
 	props: {
@@ -2482,6 +2485,21 @@ var button = new configComponent({
 			type: String,
 			required: false,
 			default: null,
+		},
+		ptooltipsPosition: {
+			type: String,
+			required: false,
+			default: "right",
+		},
+		ptooltips: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		ptooltipsText: {
+			type: String,
+			required: false,
+			default: "",
 		},
 		pshadow: {
 			type: String,
@@ -2572,6 +2590,8 @@ var button = new configComponent({
 			return this;
 		},
 		setClass: function() {
+
+			var tooltipped = "tooltipped";
 			var truncate = "truncate";
 			var cardpanel = "card-panel";
 			var hoverable = "hoverable";
@@ -2580,9 +2600,24 @@ var button = new configComponent({
 			var disable = "disable";
 			var flat = "flat";
 			var floating = "floating";
-			return new Array(this.wave, this.size, this.color, this.colorText, this.float, this.shadow, this.size, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", this.container ? container : "", this.disable ? disable : "", this.flat ? flat : "", this.floating ? floating : "").join(" ");
+			return new Array(this.wave, this.size, this.color, this.colorText, this.float, this.shadow, this.size, this.truncate ? truncate : "", this.cardpanel ? cardpanel : "", this.hoverable ? hoverable : "", this.valign ? valign : "", this.container ? container : "", this.disable ? disable : "", this.flat ? flat : "", this.floating ? floating : "", this.tooltips ? tooltipped : "").join(" ");
 		},
-	}
+	},
+	mounted: function() {
+		this.$nextTick(function() {
+			if (this.tooltips) {
+				if (this.$el) {
+					$(this.$el).attr("data-position", "right");
+					$(this.$el).attr("data-tooltip", this.tooltipsText);
+				} else {
+					this.$mount();
+					$(this.$el).attr("data-position", "right");
+					$(this.$el).attr("data-tooltip", this.tooltipsText);
+				}
+				$('.tooltipped').tooltip();
+			}
+		});
+	},
 });
 var a = new configComponent({
 	name: "c-a",

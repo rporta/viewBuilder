@@ -315,14 +315,106 @@ let UIGeneratorInterface = class {
 		this.uiLayerSecondaryEvents();
 		this.previsualizationLayerEvents();
 	}
+	resolvePanelComponent(e) {
+		if (UIGeneratorInterface.UI.ulpProperty.ButtonComponentList) {
+			//onButtonComponentList	
+			UIGeneratorInterface.UI.componentEvent = e;
+			if (UIGeneratorInterface.UI.panelComponent) {
+				UIGeneratorInterface.UI.panelComponent.$el.remove();
+				delete UIGeneratorInterface.UI.panelComponent;
+			}
+			UIGeneratorInterface.UI.panelComponent = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.bwt[2])
+				// .setCardpanel(1)
+				.setShow(0);
+			UIGeneratorInterface.UI.panelcontainerComponent = UIGeneratorInterface.UI.appVue.newComponent("c-div").setColor(UIGeneratorInterface.UI.appVue.color.bwt[1])
+				// .setCardpanel(1)
+				.setShow(0);
+			UIGeneratorInterface.UI.panelComponentTitle = UIGeneratorInterface.UI.appVue.newComponent("c-p").setColor(UIGeneratorInterface.UI.appVue.color.blue[7])
+				.setShow(0)
+				.setText("Panel de componentes")
+				.setTextAling(UIGeneratorInterface.UI.appVue.textAling.c)
+				.setCardpanel(1)
+				.setColorText(UIGeneratorInterface.UI.appVue.colorText.bwt[1]);
+
+			UIGeneratorInterface.UI.appVue.create(UIGeneratorInterface.UI.panelComponent);
+			UIGeneratorInterface.UI.panelComponent.create(UIGeneratorInterface.UI.panelComponentTitle);
+			UIGeneratorInterface.UI.panelComponent.create(UIGeneratorInterface.UI.panelcontainerComponent);
+			// UIGeneratorInterface.UI.panelComponent.$el.id = UIGeneratorInterface.UI.panelComponent.$el.id + '-panel-color';
+			// $(UIGeneratorInterface.UI.panelComponent.$el).attr("id", UIGeneratorInterface.UI.panelComponent.$el.id + '-panel-color');
+			$(UIGeneratorInterface.UI.panelComponent.$el)
+				.css("z-index", "1")
+				.css("width", "768px")
+				.css("position", "absolute")
+				.css("top", "50%")
+				.css("left", "50%")
+				.css("transform", "translate(-50%, -50%)");
+			$(UIGeneratorInterface.UI.panelComponentTitle.$el)
+				.css("margin-top", "0px")
+				.css("margin-bottom", "0px")
+				.css("padding", "12px");
+			$(UIGeneratorInterface.UI.panelcontainerComponent.$el)
+				.css("overflow-y", "auto")
+				.css("height", "485.8px");
+			UIGeneratorInterface.UI.panelComponent.setShow(1);
+			UIGeneratorInterface.UI.panelComponentTitle.setShow(1);
+			UIGeneratorInterface.UI.panelcontainerComponent.setShow(0);
+
+			for (var x in UIGeneratorInterface.UI.save.componentList) {
+				console.log(currentComponent);
+				var currentComponent = UIGeneratorInterface.UI.save.componentList[x];
+				var infoComponent = new Object();
+
+				infoComponent.name = currentComponent.$options.name;
+				infoComponent.id = currentComponent.$el.id;
+				infoComponent.uid = currentComponent._uid;
+				infoComponent.data = new Object();
+				for (var l in currentComponent._data) {
+					var currentKey = l;
+					var currentValue = currentComponent._data[l];
+
+					infoComponent.data[currentKey] = currentValue;
+				}
+				var tempHtml = new Array();
+				tempHtml.push("<p class = 'left-align' style = 'margin: 0px;'>");
+				tempHtml.push("name : " + infoComponent.name);
+				tempHtml.push("<br>");
+				tempHtml.push("id : " + infoComponent.id);
+				tempHtml.push("<br>");
+				tempHtml.push("uid : " + infoComponent.uid);
+				tempHtml.push("<br>");
+				tempHtml.push("data : ");
+				tempHtml.push("<p class = 'left-align'>");
+				for (var g in infoComponent.data) {
+					tempHtml.push(g + " : " + infoComponent.data[g]);
+					tempHtml.push("<br>");
+
+				}
+				tempHtml.push("</p>");
+				tempHtml.push("</p>");
+				var tempJoin = tempHtml.join("");
+				var tempComponent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setText(infoComponent.name + ':' + infoComponent.id).setShow(0).setTooltips(true).setTooltipsText(tempJoin);
+				var tempIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setFloat("left").setShow(0);
+
+				UIGeneratorInterface.UI.panelcontainerComponent.create(tempComponent);
+
+				tempComponent.create(tempIcon);
+				tempComponent.setShow(1);
+				tempIcon.setShow(1);
+			}
+			UIGeneratorInterface.UI.panelcontainerComponent.setShow(1);
+			setTimeout(function() {
+				$(UIGeneratorInterface.UI.panelcontainerComponent.$el).children()
+					.attr('style', 'display: block !important; margin : 10px 10px 0px 10px');
+			}, 150);
+		} else {
+			//offButtonComponentList
+			UIGeneratorInterface.UI.panelComponent.setShow(0);
+		}
+	}
 	uiLayerPrimaryEvents() {
 		$(this.ulpObject.ButtonLstComponent.$el).click(function(e) {
-			if (UIGeneratorInterface.UI.ulpProperty.ButtonComponentList) {
-
-			} else {
-
-			}
 			UIGeneratorInterface.UI.ulpProperty.ButtonComponentList = !UIGeneratorInterface.UI.ulpProperty.ButtonComponentList;
+			UIGeneratorInterface.UI.resolvePanelComponent(e);
 		});
 
 		//events, se trabaja con la variable de instancia para acceder a los componentes 
