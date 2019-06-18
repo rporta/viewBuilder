@@ -392,14 +392,48 @@ let UIGeneratorInterface = class {
 				tempHtml.push("</p>");
 				tempHtml.push("</p>");
 				var tempJoin = tempHtml.join("");
+
+				var tempOptionDelete = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0);
+				var tempOptionShow = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
+				var tempOptionMove = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
+				var tempOptionProperty = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
+				var tempOptionIconDelete = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("delete").setShow(0);
+				var tempOptionIconShow = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("visibility").setShow(0);
+				var tempOptionIconMove = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("open_with").setShow(0);
+				var tempOptionIconProperty = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("assignment").setShow(0);
+
 				var tempComponent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setText(infoComponent.name + ':' + infoComponent.id).setShow(0).setTooltips(true).setTooltipsText(tempJoin);
 				var tempIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setFloat("left").setShow(0);
+				var tempContainerComponent = UIGeneratorInterface.UI.appVue.newComponent("c-div");
+				UIGeneratorInterface.UI.panelcontainerComponent.create(tempContainerComponent);
 
-				UIGeneratorInterface.UI.panelcontainerComponent.create(tempComponent);
+				tempContainerComponent.create(tempOptionDelete);
+				tempContainerComponent.create(tempOptionShow);
+				tempContainerComponent.create(tempOptionMove);
+				tempContainerComponent.create(tempOptionProperty);
+				tempOptionDelete.create(tempOptionIconDelete);
+				tempOptionShow.create(tempOptionIconShow);
+				tempOptionMove.create(tempOptionIconMove);
+				tempOptionProperty.create(tempOptionIconProperty);
+				$(tempOptionDelete.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionShow.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionMove.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionProperty.$el).attr('style', "margin-right: 10px;");
 
+
+				tempContainerComponent.create(tempComponent);
 				tempComponent.create(tempIcon);
+
 				tempComponent.setShow(1);
 				tempIcon.setShow(1);
+				tempOptionDelete.setShow(1);
+				tempOptionShow.setShow(1);
+				tempOptionMove.setShow(1);
+				tempOptionProperty.setShow(1);
+				tempOptionIconProperty.setShow(1);
+				tempOptionIconDelete.setShow(1);
+				tempOptionIconShow.setShow(1);
+				tempOptionIconMove.setShow(1);
 			}
 			UIGeneratorInterface.UI.panelcontainerComponent.setShow(1);
 			setTimeout(function() {
