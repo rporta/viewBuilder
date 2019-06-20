@@ -393,17 +393,30 @@ let UIGeneratorInterface = class {
 				tempHtml.push("</p>");
 				var tempJoin = tempHtml.join("");
 
-				var tempOptionDelete = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0);
-				var tempOptionShow = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
-				var tempOptionMove = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
-				var tempOptionProperty = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0)
+				var tempOptionDelete = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor(" red darken-3");
+				var tempOptionShow = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("purple");
+				var tempOptionMove = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("blue");
+				var tempOptionProperty = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("deep-purple accent-1");
+
+				var tempOptionAddChild = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("green accent-3");
+				var tempOptionMovePosition = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("blue accent-2");
+				var tempOptionClearParent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("pink darken-1");
+				var tempOptionComponentList = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setColor("purple lighten-2");
+
 				var tempOptionIconDelete = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("delete").setShow(0);
 				var tempOptionIconShow = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("visibility").setShow(0);
 				var tempOptionIconMove = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("open_with").setShow(0);
 				var tempOptionIconProperty = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("assignment").setShow(0);
 
-				var tempComponent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setText(infoComponent.name + ':' + infoComponent.id).setShow(0).setTooltips(true).setTooltipsText(tempJoin);
-				var tempIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setFloat("left").setShow(0);
+				var tempOptionIconAddChild = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("system_update_alt").setShow(0);
+				var tempOptionIconMovePosition = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("import_export").setShow(0);
+				var tempOptionIconClearParent = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("exit_to_app").setShow(0);
+				var tempOptionIconComponentList = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("list").setShow(0);
+
+				// var tempComponent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setText(infoComponent.name + ':' + infoComponent.id).setShow(0).setTooltips(true).setTooltipsText(tempJoin);
+				var tempComponent = UIGeneratorInterface.UI.appVue.newComponent("c-button").setShow(0).setTooltips(true).setTooltipsText(tempJoin);
+				// var tempIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setFloat("left").setShow(0);
+				var tempIcon = UIGeneratorInterface.UI.appVue.newComponent("c-icon").setIcon("extension").setShow(0);
 				var tempContainerComponent = UIGeneratorInterface.UI.appVue.newComponent("c-div");
 				UIGeneratorInterface.UI.panelcontainerComponent.create(tempContainerComponent);
 
@@ -411,14 +424,30 @@ let UIGeneratorInterface = class {
 				tempContainerComponent.create(tempOptionShow);
 				tempContainerComponent.create(tempOptionMove);
 				tempContainerComponent.create(tempOptionProperty);
+
+				tempContainerComponent.create(tempOptionAddChild);
+				tempContainerComponent.create(tempOptionMovePosition);
+				tempContainerComponent.create(tempOptionClearParent);
+				tempContainerComponent.create(tempOptionComponentList);
+
 				tempOptionDelete.create(tempOptionIconDelete);
 				tempOptionShow.create(tempOptionIconShow);
 				tempOptionMove.create(tempOptionIconMove);
 				tempOptionProperty.create(tempOptionIconProperty);
+
+				tempOptionAddChild.create(tempOptionIconAddChild);
+				tempOptionMovePosition.create(tempOptionIconMovePosition);
+				tempOptionClearParent.create(tempOptionIconClearParent);
+				tempOptionComponentList.create(tempOptionIconComponentList);
+
 				$(tempOptionDelete.$el).attr('style', "margin-right: 10px;");
 				$(tempOptionShow.$el).attr('style', "margin-right: 10px;");
 				$(tempOptionMove.$el).attr('style', "margin-right: 10px;");
 				$(tempOptionProperty.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionAddChild.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionMovePosition.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionClearParent.$el).attr('style', "margin-right: 10px;");
+				$(tempOptionComponentList.$el).attr('style', "margin-right: 10px;");
 
 
 				tempContainerComponent.create(tempComponent);
@@ -430,10 +459,18 @@ let UIGeneratorInterface = class {
 				tempOptionShow.setShow(1);
 				tempOptionMove.setShow(1);
 				tempOptionProperty.setShow(1);
+				tempOptionAddChild.setShow(1);
+				tempOptionMovePosition.setShow(1);
+				tempOptionClearParent.setShow(1);
+				tempOptionComponentList.setShow(1);
 				tempOptionIconProperty.setShow(1);
 				tempOptionIconDelete.setShow(1);
 				tempOptionIconShow.setShow(1);
 				tempOptionIconMove.setShow(1);
+				tempOptionIconAddChild.setShow(1);
+				tempOptionIconMovePosition.setShow(1);
+				tempOptionIconClearParent.setShow(1);
+				tempOptionIconComponentList.setShow(1);
 			}
 			UIGeneratorInterface.UI.panelcontainerComponent.setShow(1);
 			setTimeout(function() {
